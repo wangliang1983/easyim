@@ -101,7 +101,7 @@ public class C2sInputBizHandler extends AbstractC2sInputHandler {
 				ctx.pipeline()
 						.addFirst(new C2sInputTimeoutHandler(auth.getTimeoutCycle() * WebsocketC2sServer.DEFAULT_TIMEOUT));
 
-				SessionManager.addSession(ctx, authAck, auth.getTimeoutCycle());
+				SessionManager.addSession(ctx, authAck, auth.getTimeoutCycle(),auth.getBizExtends());
 			} else {
 				SessionManager.removeSession(ctx, ackProtocol);
 			}

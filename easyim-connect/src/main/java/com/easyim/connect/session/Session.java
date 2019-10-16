@@ -35,7 +35,7 @@ public class Session {
 	private ResourceType resource;//设备
 	
 	private int  timeOutCycle = 1;//超时圈数
-	
+	private String bizExtends;
 	
 	public String getSessionId(){
 		return chc.channel().id().asLongText();

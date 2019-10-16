@@ -139,8 +139,12 @@ public class SessionManager {
 		}
 		
 		//钩子事件回调
-		SessionEventDto sessionEventDto = SessionEventDto.builder().resource(session.getResource()).sessionEvent(sessionEvent)
-		.tenementId(session.getTenementId()).userId(session.getUserId()).build();
+		SessionEventDto sessionEventDto = SessionEventDto.builder()
+				.resource(session.getResource())
+				.sessionEvent(sessionEvent)
+				.bizExtends(session.getBizExtends())
+				.tenementId(session.getTenementId())
+				.userId(session.getUserId()).build();
 		
 		SessionEventListenerManager.addSessionEventDto(sessionEventDto);
 	
@@ -150,13 +154,16 @@ public class SessionManager {
 	 * 更新会话状态为已登录
 	 * @param session
 	 */
-	public static boolean addSession(ChannelHandlerContext chc,AuthAck authAck,int timeOutCycle){
+	public static boolean addSession(ChannelHandlerContext chc,AuthAck authAck,int timeOutCycle,String bizExtends){
 		
 		Session session = Session
 				.builder()
 				.chc(chc).sessionStatus(SessionStatus.auth)
-				.tenementId(authAck.getTenementId()).userId(authAck.getUserId()).resource(authAck.getResource())
+				.tenementId(authAck.getTenementId())
+				.userId(authAck.getUserId())
+				.resource(authAck.getResource())
 				.timeOutCycle(timeOutCycle)
+				.bizExtends(bizExtends)
 				.build();
 				
 		
