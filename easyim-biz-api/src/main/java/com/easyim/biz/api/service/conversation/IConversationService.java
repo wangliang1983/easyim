@@ -20,7 +20,16 @@ public interface IConversationService {
 	 * @param toId
 	 * @return
 	 */
-	public long getCid(long tenementId,String fromId,String toId,long proxyCid);
+	public long getAndCreateCid(long tenementId,String fromId,String toId,long proxyCid);
+	
+	/**
+	  * 查询会话
+	 * @param tenementId
+	 * @param fromId
+	 * @param toId
+	 * @return
+	 */
+	public long getCid(long tenementId,String fromId,String toId);
 	
 	/**
 	 * 增加未读消息数
@@ -35,6 +44,30 @@ public interface IConversationService {
 	 * @param cid
 	 */
 	public void cleanUnread(String userId,long cid);
+	
+	/**
+	 * 
+	 * @param tenementId
+	 * @param fromId
+	 * @param toId
+	 */
+	public void cleanUnread(long tenementId,String fromId,String toId);
+	
+	/**
+	  *  查询会话的未读消息
+	 * @param fromId
+	 * @param toId
+	 * @return
+	 */
+	public int getUnread(long tenementId,String fromId,String toId);
+	
+	/**
+	  *  设置未读消息数
+	 * @param fromId
+	 * @param toId
+	 * @param unreads
+	 */
+	public int setUnread(long cid,String toId,int unreads);
 	
 	/**
 	 * 得到会话的未读消息数

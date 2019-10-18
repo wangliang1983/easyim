@@ -265,7 +265,7 @@ public class MessageServiceImpl implements IMessageService {
 
 		long cid = messageDto.getCid();
 		if (cid == 0) {
-			cid = conversationService.getCid(tenementId, fromId, toId, proxyCid);
+			cid = conversationService.getAndCreateCid(tenementId, fromId, toId, proxyCid);
 		}
 
 		log.info("sendMsg msg:{},{} cid succ", msgId, messageDto.getToId());
@@ -401,7 +401,7 @@ public class MessageServiceImpl implements IMessageService {
 
 		for (String userId : userIds) {
 
-			long cid = conversationService.getCid(tenementId, fromId, userId, proxyCid);
+			long cid = conversationService.getAndCreateCid(tenementId, fromId, userId, proxyCid);
 
 			C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, userId);
 
