@@ -81,19 +81,19 @@ public class ConversationServiceImpl implements IConversationService {
 	}
 
 	@Override
-	public void increaseUnread(int msgType, String userId, long cid) {
+	public void increaseUnread(int msgType, String fromId, long cid) {
 		if (!MessageType.isIncrementUnread(msgType)) {
 			return;
 		}
 
-		String key = getUnreadKey(userId, cid);
+		String key = getUnreadKey(fromId,cid);
 
 		this.redisTemplate.incr(key);
 	}
 
 	@Override
-	public void cleanUnread(String userId, long cid) {
-		String key = getUnreadKey(userId, cid);
+	public void cleanUnread(String fromId,long cid) {
+		String key = getUnreadKey(fromId, cid);
 
 		this.redisTemplate.del(key);
 

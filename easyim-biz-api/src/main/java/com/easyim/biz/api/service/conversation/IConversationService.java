@@ -36,14 +36,14 @@ public interface IConversationService {
 	 * @param tenementId
 	 * @param cid
 	 */
-	public void increaseUnread(int msgType,String userId,long cid);
+	public void increaseUnread(int msgType,String fromId,long cid);
 	
 	/**
 	 * 清空未读消息数
 	 * @param tenementId
 	 * @param cid
 	 */
-	public void cleanUnread(String userId,long cid);
+	public void cleanUnread(String fromId,long cid);
 	
 	/**
 	 * 
@@ -62,19 +62,19 @@ public interface IConversationService {
 	public int getUnread(long tenementId,String fromId,String toId);
 	
 	/**
-	  *  设置未读消息数
+	 *  设置未读消息数
 	 * @param fromId
 	 * @param toId
 	 * @param unreads
 	 */
-	public int setUnread(long cid,String toId,int unreads);
+	public int setUnread(long cid,String fromId,int unreads);
 	
 	/**
 	 * 得到会话的未读消息数
 	 * @param userId
 	 * @param cids
 	 */
-	public List<UnreadDto> selectUnread(String userId,List<Long> cids);
+	public List<UnreadDto> selectUnread(String fromId,List<Long> cids);
 	
 	/**
 	 * 添加最近的聊天会话

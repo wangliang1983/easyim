@@ -296,7 +296,7 @@ public class MessageServiceImpl implements IMessageService {
 		log.info("sendMsg msg:{},{} offline succ", msgId, messageDto.getToId());
 
 		// 增加会话未读消息数
-		this.conversationService.increaseUnread(messagePush.getType(), messagePush.getToId(), cid);
+		this.conversationService.increaseUnread(messagePush.getType(),messagePush.getFromId(),cid);
 		// 增加最近聊天的会话
 		this.conversationService.addRecentlyConversation(messagePush);
 
@@ -406,7 +406,7 @@ public class MessageServiceImpl implements IMessageService {
 			C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, userId);
 
 			// 增加会话未读消息数
-			this.conversationService.increaseUnread(messagePush.getType(), userId, cid);
+			this.conversationService.increaseUnread(messagePush.getType(), fromId, cid);
 
 			// 路由协议
 			this.protocolRouteService.route(tenementId,userId,JSON.toJSONString(c2sProtocol),null);
