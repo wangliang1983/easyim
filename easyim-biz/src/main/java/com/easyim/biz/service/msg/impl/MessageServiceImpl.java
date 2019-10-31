@@ -227,24 +227,14 @@ public class MessageServiceImpl implements IMessageService {
 
 		return message;
 	}
-
+	
+	/**
+	   *   保存消息
+	 * @param msgId
+	 * @param messageDto
+	 */
 	@Override
-	public SendMsgResultDto sendMsg(SendMsgDto messageDto,String excludeSessionId) {
-		// 生产msgId
-		long msgId = getId();
-		log.info("sendMsg msg:{},{}", msgId, messageDto.getToId());
-
-		SendMsgResultDto dto = new SendMsgResultDto();
-
-		TenementDo tenement = tenementMapper.getTenementById(messageDto.getTenementId());
-
-		boolean result = Launch.doValidator(messageDto);
-		if (tenement == null || !result) {
-			log.warn("sendMsg doValidator error:{},{}", messageDto.getToId(), JSON.toJSONString(messageDto));
-			dto.setResult(Result.inputError);
-			return dto;
-		}
-
+	public  C2sProtocol saveMsg(long msgId,SendMsgDto messageDto) {
 		// 得到代理会话
 		long tenementId = messageDto.getTenementId();
 		long proxyCid = messageDto.getProxyCid();
@@ -296,12 +286,34 @@ public class MessageServiceImpl implements IMessageService {
 		log.info("sendMsg msg:{},{} offline succ", msgId, messageDto.getToId());
 
 		// 增加会话未读消息数
-		this.conversationService.increaseUnread(messagePush.getType(),messagePush.getFromId(),cid);
+		this.conversationService.increaseUnread(messagePush.getType(), messagePush.getFromId(), cid);
 		// 增加最近聊天的会话
 		this.conversationService.addRecentlyConversation(messagePush);
+	
+		return c2sProtocol;
+	}
+
+	@Override
+	public SendMsgResultDto sendMsg(SendMsgDto messageDto,String excludeSessionId) {
+		// 生产msgId
+		long msgId = getId();
+		log.info("sendMsg msg:{},{}", msgId, messageDto.getToId());
+
+		SendMsgResultDto dto = new SendMsgResultDto();
+
+		TenementDo tenement = tenementMapper.getTenementById(messageDto.getTenementId());
+
+		boolean result = Launch.doValidator(messageDto);
+		if (tenement == null || !result) {
+			log.warn("sendMsg doValidator error:{},{}", messageDto.getToId(), JSON.toJSONString(messageDto));
+			dto.setResult(Result.inputError);
+			return dto;
+		}
+
+		C2sProtocol c2sProtocol = saveMsg(msgId,messageDto);
 
 		// 路由协议
-		this.protocolRouteService.route(tenementId, toId, JSON.toJSONString(c2sProtocol),excludeSessionId);
+		this.protocolRouteService.route(messageDto.getTenementId(), messageDto.getToId(), JSON.toJSONString(c2sProtocol),excludeSessionId);
 
 		log.info("sendMsg msg:{},{} route succ", msgId, messageDto.getToId());
 

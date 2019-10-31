@@ -33,4 +33,7 @@ public interface IConversationMapper {
 	+"</script>")
 	public List<ConversationDo> selectConversationByIds(@Param("tenementId") long tenementId,
 			@Param("ids") List<Long> ids);
+
+
+
 }

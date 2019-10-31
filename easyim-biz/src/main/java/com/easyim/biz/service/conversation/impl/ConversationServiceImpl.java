@@ -229,6 +229,5 @@ public class ConversationServiceImpl implements IConversationService {
 		return conversation.getId();
 	}
 
-	
 
 }
