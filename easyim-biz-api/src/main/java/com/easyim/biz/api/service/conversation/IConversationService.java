@@ -76,6 +76,8 @@ public interface IConversationService {
 	 */
 	public List<UnreadDto> selectUnread(String fromId,List<Long> cids);
 	
+	
+	
 	/**
 	 * 添加最近的聊天会话
 	 * @param messagePush

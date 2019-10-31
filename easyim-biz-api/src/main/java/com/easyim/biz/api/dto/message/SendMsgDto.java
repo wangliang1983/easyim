@@ -45,9 +45,11 @@ public class SendMsgDto {
 		pic(1),//图片
 		voice(2),//声音
 		notify(3),//系统通知,不落库,只走离线消息
-		file(4),//文件
-		notifyOnline(5)//系统通知,不落库,不走离线消息,只推在线
-		;//文件
+		userDefined(4),//自定义
+		notifyOnline(5),//系统通知,不落库,不走离线消息,只推在线
+		file(6),//文件
+		video(7),//视频
+		notifyIndb(100);//系统通知落库
 		
 		MessageType(int value){
 			this.value = value;

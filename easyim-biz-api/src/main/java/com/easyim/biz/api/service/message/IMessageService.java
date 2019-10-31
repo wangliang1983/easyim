@@ -16,6 +16,16 @@ import java.util.List;
  *
  */
 public interface IMessageService {
+	
+	/**
+	  * 保持消息
+	 * @param msgId
+	 * @param messageDto
+	 * @return
+	 */
+	public  C2sProtocol saveMsg(long msgId,SendMsgDto messageDto);
+	
+	
 	/**
 	 * 发送消息
 	 * @param message
