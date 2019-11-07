@@ -8,7 +8,8 @@ import lombok.Data;
 
 @Data
 public class SendMsgResultDto {
-	private long id;
 	private Result result = Result.success;
 	private MessagePush messagePush;
+	private long msgId;
+	
 }
