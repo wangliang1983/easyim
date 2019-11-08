@@ -316,6 +316,7 @@ public class MessageServiceImpl implements IMessageService {
 		this.protocolRouteService.route(messageDto.getTenementId(), messageDto.getToId(), JSON.toJSONString(c2sProtocol),excludeSessionId);
 
 		log.info("sendMsg msg:{},{} route succ", msgId, messageDto.getToId());
+		dto.setMessagePush(JSON.parseObject(c2sProtocol.getBody(), MessagePush.class));
 		dto.setMsgId(msgId);
 		return dto;
 	}
