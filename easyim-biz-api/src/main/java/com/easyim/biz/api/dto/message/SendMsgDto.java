@@ -35,6 +35,10 @@ public class SendMsgDto {
 
 	private String bizUid;//业务方唯一id
 	
+	private boolean saveOfflineMsg = true;//是否保存离线消息
+	
+	private boolean recentlyConversation = true;//是否保存最近会话列表
+	
 	/**
 	 * 客户端根据messageType解析推送的内容
 	 * @author wl

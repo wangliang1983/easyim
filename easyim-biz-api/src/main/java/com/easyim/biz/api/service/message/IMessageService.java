@@ -25,6 +25,12 @@ public interface IMessageService {
 	 */
 	public  C2sProtocol saveMsg(long msgId,SendMsgDto messageDto);
 	
+	/**
+	 * 保存消息
+	 * @param messageDto
+	 * @return
+	 */
+	public  C2sProtocol saveMsg(SendMsgDto messageDto);
 	
 	/**
 	 * 发送消息
@@ -50,7 +56,7 @@ public interface IMessageService {
 	 * @param userIds
 	 * @param messagePush
 	 */
-	public void pushMsg(MessagePush messagePush, List<String> userIds);
+	public void pushMsg(MessagePush messagePush, String fromId,String toId);
 	
 	/**
 	 * 推送未同步消息
