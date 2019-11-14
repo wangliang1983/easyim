@@ -35,5 +35,14 @@ public interface IConversationMapper {
 			@Param("ids") List<Long> ids);
 
 
+	@Select(
+			"<script>"
+			+"select * from t_conversation where tenement_id = #{tenementId} and id in "
+			+"<foreach collection=\"ids\" open=\"(\" close=\")\"  separator=\",\" item=\"id\">"
+			+"#{id}"
+			+"</foreach>"
+			+"</script>")
+			public List<ConversationDo> selectConversationByIds(@Param("tenementId") long tenementId,
+					@Param("userId") String userId);
 
 }

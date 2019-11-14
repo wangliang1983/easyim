@@ -229,5 +229,11 @@ public class ConversationServiceImpl implements IConversationService {
 		return conversation.getId();
 	}
 
+	@Override
+	public List<ConversationDto> selectRecentlyConversationByDb(long tenementId, String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

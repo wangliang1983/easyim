@@ -1,5 +1,7 @@
 package com.easyim.biz.api.dto.message;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,7 +17,10 @@ import lombok.Data;
  *
  */
 @Data
-public class OfflineMsgDto {
+public class OfflineMsgDto implements Serializable{
+	
+	private static final long serialVersionUID = -7897498471392569094L;
+	
 	@Min(value=1)
 	private long tenementId;
 	@NotBlank

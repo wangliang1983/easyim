@@ -91,4 +91,13 @@ public interface IConversationService {
 	 * @return
 	 */
 	public List<ConversationDto> selectRecentlyConversation(long tenementId,String userId);
+
+
+	/**
+	 * 查询一个用户的最近的会话列表
+	 * @param tenementId
+	 * @param userId
+	 * @return
+	 */
+	public List<ConversationDto> selectRecentlyConversationByDb(long tenementId,String userId);
 }

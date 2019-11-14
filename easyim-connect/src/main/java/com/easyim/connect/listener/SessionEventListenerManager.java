@@ -19,19 +19,12 @@ public class SessionEventListenerManager implements BeanPostProcessor{
 
 	private static List<SessionEventListener> listeners = new CopyOnWriteArrayList<>();
 	
-	private static List<SessionEventListener> synListeners = new CopyOnWriteArrayList<>();
-	
-	
 	private static LinkedBlockingQueue<SessionEventDto> queue = new LinkedBlockingQueue<SessionEventDto>();
 	
 	public static void addSessionEventDto(SessionEventDto sessionEventDto){
-		log.info("SessionEventListenerManager l,syn:{},{}",listeners.size(),synListeners.size());
+		log.info("SessionEventListenerManager l,syn:{},{}",listeners.size());
 		
 		queue.add(sessionEventDto);
-		
-		for(SessionEventListener sl:synListeners){
-			sl.callback(sessionEventDto);
-		}
 	}
 	
 	@PostConstruct
@@ -64,11 +57,7 @@ public class SessionEventListenerManager implements BeanPostProcessor{
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		if(bean instanceof SessionEventListener){
 			SessionEventListener l = (SessionEventListener)bean;
-			if(l.isSyn()){
-				synListeners.add(l);
-			}else{
 				listeners.add(l);
-			}
 		}
 		return bean;
 	}

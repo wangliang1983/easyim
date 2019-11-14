@@ -1,6 +1,8 @@
 package com.easyim.biz.api.dto.message;
 
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -10,8 +12,12 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class SendMsgDto {
+public class SendMsgDto implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5892262306396991909L;
 	@Min(value = 0)
 	private long tenementId;
 	@NotNull
