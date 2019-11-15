@@ -3,13 +3,10 @@ package com.easyim.connect.session;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.easy.springboot.c2s.server.AbstractServerRegister;
@@ -17,13 +14,11 @@ import com.easyim.biz.api.dto.protocol.C2sProtocol;
 import com.easyim.biz.api.dto.user.UserSessionDto;
 import com.easyim.biz.api.protocol.c2s.AuthAck;
 import com.easyim.biz.api.protocol.c2s.CloseSession;
+import com.easyim.biz.api.protocol.c2s.UserStatusPush.UserStatus;
 import com.easyim.biz.api.protocol.enums.c2s.EasyImC2sType;
-import com.easyim.biz.api.protocol.enums.c2s.ResourceType;
 import com.easyim.biz.api.protocol.enums.c2s.Result;
-import com.easyim.biz.api.service.c2s.handle.IC2sHandleService;
 import com.easyim.connect.listener.SessionEventDto;
 import com.easyim.connect.listener.SessionEventListenerManager;
-import com.easyim.connect.listener.SessionEventDto.SessionEvent;
 import com.easyim.connect.session.Session.SessionStatus;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -125,7 +120,7 @@ public class SessionManager {
 		
 		chc.close();
 		
-		sessionCallback(session,SessionEvent.logout);
+		sessionCallback(session,UserStatus.logout);
 	}
 	
 	/**
@@ -133,7 +128,7 @@ public class SessionManager {
 	 * @param session
 	 * @param sessionEvent
 	 */
-	private static void sessionCallback(Session session,SessionEvent sessionEvent){
+	private static void sessionCallback(Session session,UserStatus userStatus){
 		if(session==null){
 			return;
 		}
@@ -141,8 +136,8 @@ public class SessionManager {
 		//钩子事件回调
 		SessionEventDto sessionEventDto = SessionEventDto.builder()
 				.resource(session.getResource())
-				.sessionEvent(sessionEvent)
-				.bizExtends(session.getBizExtends())
+				.userStatus(userStatus)
+				.userType(session.getUserType())
 				.tenementId(session.getTenementId())
 				.userId(session.getUserId()).build();
 		
@@ -154,7 +149,7 @@ public class SessionManager {
 	 * 更新会话状态为已登录
 	 * @param session
 	 */
-	public static boolean addSession(ChannelHandlerContext chc,AuthAck authAck,int timeOutCycle,String bizExtends){
+	public static boolean addSession(ChannelHandlerContext chc,AuthAck authAck,int timeOutCycle,String userType){
 		
 		Session session = Session
 				.builder()
@@ -163,7 +158,7 @@ public class SessionManager {
 				.userId(authAck.getUserId())
 				.resource(authAck.getResource())
 				.timeOutCycle(timeOutCycle)
-				.bizExtends(bizExtends)
+				.userType(userType)
 				.build();
 				
 		
@@ -187,7 +182,7 @@ public class SessionManager {
 		
 		sessionIdMap.put(Session.getSessionId(chc),session);
 		
-		sessionCallback(session,SessionEvent.login);
+		sessionCallback(session,UserStatus.login);
 
 		return true;
 	}
