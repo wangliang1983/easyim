@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.dozer.Mapper;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.easyim.biz.api.dto.conversation.ConversationDto;
 import com.easyim.biz.api.dto.conversation.UnreadDto;
 import com.easyim.biz.api.dto.message.SendMsgDto.MessageType;
@@ -22,7 +23,10 @@ import com.easyim.route.service.IProtocolRouteService;
 import com.easyim.route.service.IUserRouteService;
 
 import cn.linkedcare.springboot.redis.template.RedisTemplate;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @Service(interfaceClass = IConversationService.class)
 public class ConversationServiceImpl implements IConversationService {
 
@@ -152,10 +156,19 @@ public class ConversationServiceImpl implements IConversationService {
 		for (ConversationDo c : cs) {
 			ConversationDto dto = mapper.map(c, ConversationDto.class);
 			dto.setCid(c.getId());
-
+			
+			if(userId.equals(c.getSmallId())) {
+				dto.setFromId(c.getSmallId());
+				dto.setToId(c.getBigId());
+			}else {
+				dto.setFromId(c.getBigId());
+				dto.setToId(c.getSmallId());
+			}
+			
 			dtos.add(dto);
 		}
 
+		log.info("selectRecentlyConversation:{},{},{}",tenementId,userId,JSON.toJSONString(dtos));
 		return dtos;
 	}
 
