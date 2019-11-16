@@ -1,5 +1,7 @@
 package com.easyim.biz.domain;
 
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -12,4 +14,5 @@ public class TenementDo {
 	private long id;
 	private String name;//描述
 	private boolean isMultiConn;//同一端是否允许多个连接
+	private Date gmtCreate;
 }
