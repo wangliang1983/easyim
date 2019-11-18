@@ -154,6 +154,11 @@ public class ConversationServiceImpl implements IConversationService {
 
 		List<ConversationDto> dtos = new ArrayList<ConversationDto>();
 
+		
+		if(ids.size()<=0) {
+			return dtos;
+		}
+		
 		List<ConversationDo> cs = this.conversationMapper.selectConversationByIds(tenementId, ids);
 		for (ConversationDo c : cs) {
 			ConversationDto dto = mapper.map(c, ConversationDto.class);
@@ -251,9 +256,13 @@ public class ConversationServiceImpl implements IConversationService {
 
 	@Override
 	public Map<String, Long> selectRecentlyConversationMap(long tenementId, String userId) {
-		List<ConversationDto> dtos = selectRecentlyConversationByDb(tenementId,userId);
+		List<ConversationDto> dtos = selectRecentlyConversation(tenementId,userId);
 		
 		Map<String,Long> maps = new HashMap<String,Long>();
+		if(dtos==null||dtos.size()<=0) {
+			return maps;
+		}
+		
 		
 		for(ConversationDto dto:dtos) {
 			if(userId.equals(dto.getFromId())) {
