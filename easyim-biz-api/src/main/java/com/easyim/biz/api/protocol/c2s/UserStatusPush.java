@@ -6,8 +6,8 @@ import lombok.Data;
 public class UserStatusPush extends AbstractProtocol{
 
 	public static enum UserStatus{
-		login,//登入
-		logout;//登出
+		online,//在线
+		offline;//离线
 	}
 	
 	private static final long serialVersionUID = 7634782874109390758L;
