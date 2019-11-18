@@ -2,6 +2,18 @@ package com.easyim.biz.api.protocol.enums.c2s;
 
 
 public enum EasyImC2sType implements C2sType{
+	userStatusPush {
+		@Override
+		public EasyImC2sType getAck() {
+			return userStatusPush;
+		}
+	},//发送消息
+	userStatusPushAck {
+		@Override
+		public	EasyImC2sType getAck() {
+			return null;
+		}
+	},
 	readMessage {
 		@Override
 		public EasyImC2sType getAck() {

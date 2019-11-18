@@ -10,8 +10,10 @@ import javax.annotation.Resource;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.easyim.biz.api.dto.conversation.ConversationDto;
+import com.easyim.biz.api.dto.protocol.C2sProtocol;
 import com.easyim.biz.api.protocol.c2s.UserStatusPush;
 import com.easyim.biz.api.protocol.c2s.UserStatusPush.UserStatus;
+import com.easyim.biz.api.protocol.enums.c2s.EasyImC2sType;
 import com.easyim.biz.api.service.conversation.IConversationService;
 import com.easyim.biz.api.service.user.IUserService;
 import com.easyim.route.service.IProtocolRouteService;
@@ -53,6 +55,9 @@ public class UserServiceImpl implements IUserService {
 		
 		
 		for(String  online:onlineUserIds) {
+			
+			C2sProtocol c2sProtocol = new C2sProtocol();
+			
 			UserStatusPush userStatusPush = new UserStatusPush();
 			
 			userStatusPush.setUserStatus(status);
@@ -60,7 +65,10 @@ public class UserServiceImpl implements IUserService {
 			userStatusPush.setToId(userId);
 			userStatusPush.setCid(map.get(userId));
 			
-			protocolRouteService.route(tenementId, online,JSON.toJSONString(userStatusPush),null);
+			c2sProtocol.setType(EasyImC2sType.userStatusPush.name());
+			c2sProtocol.setBody(JSON.toJSONString(userStatusPush));
+			
+			protocolRouteService.route(tenementId, online,JSON.toJSONString(c2sProtocol),null);
 		}
 		
 	}
