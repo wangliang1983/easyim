@@ -120,7 +120,7 @@ public class SessionManager {
 		
 		chc.close();
 		
-		sessionCallback(session,UserStatus.logout);
+		sessionCallback(session,UserStatus.offline);
 	}
 	
 	/**
@@ -182,7 +182,7 @@ public class SessionManager {
 		
 		sessionIdMap.put(Session.getSessionId(chc),session);
 		
-		sessionCallback(session,UserStatus.login);
+		sessionCallback(session,UserStatus.online);
 
 		return true;
 	}
