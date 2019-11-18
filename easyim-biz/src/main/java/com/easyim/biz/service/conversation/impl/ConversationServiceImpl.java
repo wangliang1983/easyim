@@ -136,9 +136,11 @@ public class ConversationServiceImpl implements IConversationService {
 
 		double score = (double) System.currentTimeMillis();
 
+		log.info("addRecentlyConversation:{},{}",fromRecentlyCids,messagePush.getCid());
 		redisTemplate.zadd(fromRecentlyCids, score, String.valueOf(messagePush.getCid()));
 		redisTemplate.zremrangeByRank(fromRecentlyCids, 100, Integer.MAX_VALUE);
 
+		log.info("addRecentlyConversation:{},{}",toRecentlyCids,messagePush.getCid());
 		redisTemplate.zadd(toRecentlyCids, score, String.valueOf(messagePush.getCid()));
 		redisTemplate.zremrangeByRank(toRecentlyCids, 100, Integer.MAX_VALUE);
 	}
