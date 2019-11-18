@@ -1,7 +1,9 @@
 package com.easyim.biz.service.conversation.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -244,8 +246,24 @@ public class ConversationServiceImpl implements IConversationService {
 
 	@Override
 	public List<ConversationDto> selectRecentlyConversationByDb(long tenementId, String userId) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Map<String, Long> selectRecentlyConversationMap(long tenementId, String userId) {
+		List<ConversationDto> dtos = selectRecentlyConversationByDb(tenementId,userId);
+		
+		Map<String,Long> maps = new HashMap<String,Long>();
+		
+		for(ConversationDto dto:dtos) {
+			if(userId.equals(dto.getFromId())) {
+				maps.put(dto.getToId(),dto.getCid());
+			}else {
+				maps.put(dto.getFromId(),dto.getCid());
+			}
+		}
+		
+		return maps;
 	}
 
 

@@ -1,6 +1,7 @@
 package com.easyim.biz.api.service.conversation;
 
 import java.util.List;
+import java.util.Map;
 
 import com.easyim.biz.api.dto.conversation.ConversationDto;
 import com.easyim.biz.api.dto.conversation.UnreadDto;
@@ -91,6 +92,14 @@ public interface IConversationService {
 	 * @return
 	 */
 	public List<ConversationDto> selectRecentlyConversation(long tenementId,String userId);
+	
+	/**
+	 * 
+	 * @param tenementId
+	 * @param userId
+	 * @return
+	 */
+	public Map<String, Long> selectRecentlyConversationMap(long tenementId,String userId);
 
 
 	/**

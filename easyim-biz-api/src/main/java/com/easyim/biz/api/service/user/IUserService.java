@@ -1,6 +1,7 @@
 package com.easyim.biz.api.service.user;
 
 import java.util.List;
+import java.util.Map;
 
 import com.easyim.biz.api.protocol.c2s.UserStatusPush.UserStatus;
 
@@ -19,6 +20,7 @@ public interface IUserService {
 	 */
 	List<String> selectUserOnline(long tenementId,List<String> userIds);
 	
+
 	/**
 	 * 查询用户最后一次登录时间
 	 * @param tenementId

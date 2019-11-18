@@ -11,10 +11,12 @@ public class UserStatusPush extends AbstractProtocol{
 	}
 	
 	private static final long serialVersionUID = 7634782874109390758L;
-
-	private long tenementId;
 	
-	private String userId;
+	private long cid;
+	
+	private String fromId;
+	
+	private String toId;
 	
 	private UserStatus userStatus;
 	

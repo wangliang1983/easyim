@@ -1,7 +1,9 @@
 package com.easyim.biz.service.user.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -40,31 +42,29 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public void pushUserStatus(long tenementId, String userId, UserStatus status) {
-		List<ConversationDto>  conversationDtos  = conversationService.selectRecentlyConversation(tenementId,userId);
+		Map<String, Long>  map = conversationService.selectRecentlyConversationMap(tenementId,userId);
 		
-		List<String> userIds = new ArrayList<String>();
-		for(ConversationDto  c:conversationDtos) {
-			String fromId = c.getFromId();
-			String toId   = c.getToId();
-			if(userId.equals(fromId)) {
-				userIds.add(toId);
-			}else {
-				userIds.add(fromId);
-			}
-		}
+		List<String> list = new ArrayList<String>();
+		list.addAll(map.keySet());
 		
-		List<String> onlineUserIds = userRouteService.getOnlineUsers(tenementId, userIds);
+		List<String> onlineUserIds = userRouteService.getOnlineUsers(tenementId,list);
 		
 		
-		UserStatusPush userStatusPush = new UserStatusPush();
-		userStatusPush.setTenementId(tenementId);
-		userStatusPush.setUserStatus(status);
-		userStatusPush.setUserId(userId);
+		
 		
 		for(String  online:onlineUserIds) {
+			UserStatusPush userStatusPush = new UserStatusPush();
+			
+			userStatusPush.setUserStatus(status);
+			userStatusPush.setFromId(online);
+			userStatusPush.setToId(userId);
+			userStatusPush.setCid(map.get(userId));
+			
 			protocolRouteService.route(tenementId, online,JSON.toJSONString(userStatusPush),null);
 		}
 		
 	}
+
+
 
 }
