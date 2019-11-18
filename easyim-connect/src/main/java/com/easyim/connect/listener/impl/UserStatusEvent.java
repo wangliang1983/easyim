@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.easyim.biz.api.service.conversation.IConversationService;
 import com.easyim.connect.listener.SessionEventDto;
 import com.easyim.connect.listener.SessionEventListener;
@@ -12,7 +13,7 @@ import com.easyim.connect.listener.SessionEventListener;
 @Component
 public class UserStatusEvent implements SessionEventListener{
 
-	@Resource
+	@Reference
 	private IConversationService conversationService;
 	
 	@Override
