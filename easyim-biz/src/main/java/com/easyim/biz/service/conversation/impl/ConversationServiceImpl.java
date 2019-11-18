@@ -140,6 +140,7 @@ public class ConversationServiceImpl implements IConversationService {
 		redisTemplate.zremrangeByRank(fromRecentlyCids, 100, Integer.MAX_VALUE);
 
 		redisTemplate.zadd(toRecentlyCids, score, String.valueOf(messagePush.getCid()));
+		redisTemplate.zremrangeByRank(toRecentlyCids, 100, Integer.MAX_VALUE);
 	}
 
 	@Override
