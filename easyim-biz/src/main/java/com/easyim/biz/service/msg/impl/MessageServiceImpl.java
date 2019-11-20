@@ -191,6 +191,8 @@ public class MessageServiceImpl implements IMessageService {
 		String key = getOfflineSetKey(messagePush.getTenementId(), toId);
 		// 多设备离线消息
 		try {
+			this.conversationService.increaseUnread(messagePush.getType(), messagePush.getFromId(), messagePush.getCid());
+
 			saveOfflineMsg(key, messagePush.getId(), c2sProtocol);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -303,16 +305,11 @@ public class MessageServiceImpl implements IMessageService {
 
 		log.info("sendMsg msg:{},{} offline succ", msgId, messageDto.getToId());
 
-		if (messageDto.isSaveOfflineMsg()) {
-			// 增加会话未读消息数
-			this.conversationService.increaseUnread(messagePush.getType(), messagePush.getFromId(), cid);
-		}
+		
 
-		if (messageDto.isRecentlyConversation()) {
-			// 增加最近聊天的会话
-			this.conversationService.addRecentlyConversation(messagePush);
-		}
-
+		// 增加最近聊天的会话
+		this.conversationService.addRecentlyConversation(messagePush,messageDto.isSaveFromConversation(),messageDto.isSaveToConversation());
+		
 		return c2sProtocol;
 	}
 
@@ -429,19 +426,20 @@ public class MessageServiceImpl implements IMessageService {
 	}
 
 	@Override
-	public void pushMsg(MessagePush messagePush, String fromId,String toId) {
+	public void pushMsg(MessagePush messagePush, String pushId,SendMsgDto sendMsgDto) {
 		long tenementId = messagePush.getTenementId();
 		long proxyCid = messagePush.getProxyCid();
 
-		long cid = conversationService.getAndCreateCid(tenementId,fromId,toId,proxyCid);
+		long cid = conversationService.getAndCreateCid(tenementId,sendMsgDto.getFromId(),sendMsgDto.getToId(),proxyCid);
+		messagePush.setCid(cid);
+		
+		
+		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, pushId, sendMsgDto.isSaveOfflineMsg());
 
-		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, fromId, true);
-
-		// 增加会话未读消息数
-		this.conversationService.increaseUnread(messagePush.getType(), fromId, cid);
+		this.conversationService.addRecentlyConversation(messagePush,sendMsgDto.isSaveFromConversation(),sendMsgDto.isSaveToConversation());
 
 		// 路由协议
-		this.protocolRouteService.route(tenementId,fromId, JSON.toJSONString(c2sProtocol), null);
+		this.protocolRouteService.route(tenementId,pushId,JSON.toJSONString(c2sProtocol), null);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.easyim.biz.api.service.conversation;
 import java.util.List;
 import java.util.Map;
 
+import com.easyim.biz.api.dto.conversation.CidDto;
 import com.easyim.biz.api.dto.conversation.ConversationDto;
 import com.easyim.biz.api.dto.conversation.UnreadDto;
 import com.easyim.biz.api.protocol.c2s.MessagePush;
@@ -31,6 +32,17 @@ public interface IConversationService {
 	 * @return
 	 */
 	public long getCid(long tenementId,String fromId,String toId);
+	
+	
+	/**
+	 * 得到用户cid和proxyCid
+	 * @param tenementId
+	 * @param fromId
+	 * @param proxyToid
+	 * @param toId
+	 * @return
+	 */
+	public CidDto getCidAndProxyCid(long tenementId,String fromId,String proxyToid,String toId);
 	
 	/**
 	 * 增加未读消息数
@@ -83,7 +95,7 @@ public interface IConversationService {
 	 * 添加最近的聊天会话
 	 * @param messagePush
 	 */
-	public void addRecentlyConversation(MessagePush messagePush);
+	public void addRecentlyConversation(MessagePush messagePush,boolean saveFromConversation,boolean saveToConversation);
 	
 	/**
 	 * 查询一个用户的最近的会话列表

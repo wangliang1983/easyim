@@ -56,7 +56,7 @@ public interface IMessageService {
 	 * @param userIds
 	 * @param messagePush
 	 */
-	public void pushMsg(MessagePush messagePush, String fromId,String toId);
+	public void pushMsg(MessagePush messagePush,String pushId,SendMsgDto sendMsgDto);
 	
 	/**
 	 * 推送未同步消息

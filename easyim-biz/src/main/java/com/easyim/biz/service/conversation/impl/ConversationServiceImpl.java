@@ -12,15 +12,18 @@ import org.dozer.Mapper;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
+import com.easyim.biz.api.dto.conversation.CidDto;
 import com.easyim.biz.api.dto.conversation.ConversationDto;
 import com.easyim.biz.api.dto.conversation.UnreadDto;
 import com.easyim.biz.api.dto.message.SendMsgDto.MessageType;
 import com.easyim.biz.api.protocol.c2s.MessagePush;
 import com.easyim.biz.api.service.conversation.IConversationService;
+import com.easyim.biz.api.service.conversation.IProxyConversationService;
 import com.easyim.biz.constant.Constant;
 import com.easyim.biz.domain.ConversationDo;
 import com.easyim.biz.domain.ProxyConversationDo;
 import com.easyim.biz.mapper.conversation.IConversationMapper;
+import com.easyim.biz.mapper.conversation.IProxyConversationMapper;
 import com.easyim.route.service.IProtocolRouteService;
 import com.easyim.route.service.IUserRouteService;
 
@@ -34,7 +37,11 @@ public class ConversationServiceImpl implements IConversationService {
 
 	@Resource
 	private IConversationMapper conversationMapper;
-
+	
+	@Resource
+	private IProxyConversationService proxyConversationService;
+	
+	
 	@Resource
 	private IUserRouteService userRouteService;
 
@@ -125,7 +132,7 @@ public class ConversationServiceImpl implements IConversationService {
 	}
 
 	@Override
-	public void addRecentlyConversation(MessagePush messagePush) {
+	public void addRecentlyConversation(MessagePush messagePush,boolean saveFromConversation,boolean saveToConversation) {
 
 		long tenementId = messagePush.getTenementId();
 		String toId = messagePush.getFromId();
@@ -136,13 +143,17 @@ public class ConversationServiceImpl implements IConversationService {
 
 		double score = (double) System.currentTimeMillis();
 
-		log.info("addRecentlyConversation:{},{}",fromRecentlyCids,messagePush.getCid());
-		redisTemplate.zadd(fromRecentlyCids, score, String.valueOf(messagePush.getCid()));
-		redisTemplate.zremrangeByRank(fromRecentlyCids, 100, Integer.MAX_VALUE);
+		if(saveFromConversation) {
+			log.info("addRecentlyConversation:{},{}",fromRecentlyCids,messagePush.getCid());
+			redisTemplate.zadd(fromRecentlyCids, score, String.valueOf(messagePush.getCid()));
+			redisTemplate.zremrangeByRank(fromRecentlyCids, 100, Integer.MAX_VALUE);
+		}
 
-		log.info("addRecentlyConversation:{},{}",toRecentlyCids,messagePush.getCid());
-		redisTemplate.zadd(toRecentlyCids, score, String.valueOf(messagePush.getCid()));
-		redisTemplate.zremrangeByRank(toRecentlyCids, 100, Integer.MAX_VALUE);
+		if(saveToConversation) {
+			log.info("addRecentlyConversation:{},{}",toRecentlyCids,messagePush.getCid());
+			redisTemplate.zadd(toRecentlyCids, score, String.valueOf(messagePush.getCid()));
+			redisTemplate.zremrangeByRank(toRecentlyCids, 100, Integer.MAX_VALUE);
+		}
 	}
 
 	@Override
@@ -276,6 +287,19 @@ public class ConversationServiceImpl implements IConversationService {
 		}
 		
 		return maps;
+	}
+
+	@Override
+	public CidDto getCidAndProxyCid(long tenementId, String fromId, String proxyToid, String toId) {
+		CidDto cidDto = new CidDto();
+		
+		long proxyCid = this.proxyConversationService.getProxyCid(tenementId, fromId,proxyToid);
+		long cid   = this.getCid(tenementId, fromId, toId);
+		
+		cidDto.setCid(cid);
+		cidDto.setProxyCid(proxyCid);
+		
+		return cidDto;
 	}
 
 
