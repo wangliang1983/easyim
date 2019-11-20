@@ -427,6 +427,8 @@ public class MessageServiceImpl implements IMessageService {
 
 	@Override
 	public void pushMsg(MessagePush messagePush, String pushId,SendMsgDto sendMsgDto) {
+		log.info("pushMsg:{},{}",pushId,JSON.toJSONString(messagePush));
+		
 		long tenementId = messagePush.getTenementId();
 		long proxyCid = messagePush.getProxyCid();
 
