@@ -427,13 +427,14 @@ public class MessageServiceImpl implements IMessageService {
 
 	@Override
 	public void pushMsg(MessagePush messagePush, String pushId,SendMsgDto sendMsgDto) {
-		log.info("pushMsg:{},{}",pushId,JSON.toJSONString(messagePush));
 		
 		long tenementId = messagePush.getTenementId();
 		long proxyCid = messagePush.getProxyCid();
 
 		long cid = conversationService.getAndCreateCid(tenementId,sendMsgDto.getFromId(),sendMsgDto.getToId(),proxyCid);
 		messagePush.setCid(cid);
+		
+		log.info("pushMsg:{},{},{}",pushId,cid,JSON.toJSONString(messagePush));
 		
 		
 		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, pushId, sendMsgDto.isSaveOfflineMsg());
