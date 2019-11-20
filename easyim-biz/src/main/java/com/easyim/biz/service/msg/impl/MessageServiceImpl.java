@@ -431,7 +431,7 @@ public class MessageServiceImpl implements IMessageService {
 		long tenementId = messagePush.getTenementId();
 		long proxyCid = messagePush.getProxyCid();
 
-		long cid = conversationService.getAndCreateCid(tenementId,sendMsgDto.getFromId(),sendMsgDto.getToId(),proxyCid);
+		long cid = conversationService.getAndCreateCid(tenementId,messagePush.getFromId(),messagePush.getToId(),proxyCid);
 		messagePush.setCid(cid);
 		
 		log.info("pushMsg:{},{},{}",pushId,cid,JSON.toJSONString(messagePush));
