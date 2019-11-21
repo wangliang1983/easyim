@@ -286,13 +286,15 @@ public class MessageServiceImpl implements IMessageService {
 		messagePush.setCid(cid);
 		messagePush.setContent(messageDto.getContent());
 		messagePush.setFromId(fromId);
-		messagePush.setId(msgId);
 		messagePush.setProxyCid(proxyCid);
 		messagePush.setSubType(messageDto.getSubType());
 		messagePush.setTenementId(tenementId);
 		messagePush.setToId(toId);
 		messagePush.setType(messageDto.getType().getValue());
-
+		
+		messagePush.setFromType(messageDto.getFromType());
+		messagePush.setToType(messageDto.getToType());
+		
 		// 保存db消息
 		MessageDo messageDo = saveMsg(messagePush, proxyFromId, proxyToId);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

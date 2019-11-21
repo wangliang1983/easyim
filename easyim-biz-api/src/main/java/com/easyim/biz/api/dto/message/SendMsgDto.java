@@ -6,6 +6,8 @@ import java.io.Serializable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.easyim.biz.api.protocol.c2s.Message.UserType;
+
 //import javax.validation.constraints.Min;
 //import javax.validation.constraints.NotNull;
 
@@ -14,19 +16,21 @@ import lombok.Data;
 @Data
 public class SendMsgDto implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5892262306396991909L;
 	@Min(value = 0)
 	private long tenementId;
 	@NotNull
 	private String fromId;
 	
+	private UserType fromType;
+	
 	private String proxyFromId;
+	
 	@NotNull
 	private String toId;
 
+	private UserType toType;
+	
 	private String proxyToId; 
 	@Min(value = 0)
 	private long cid;

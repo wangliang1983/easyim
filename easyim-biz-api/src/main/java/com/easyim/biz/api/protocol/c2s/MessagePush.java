@@ -1,6 +1,7 @@
 package com.easyim.biz.api.protocol.c2s;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
+import com.easyim.biz.api.protocol.c2s.Message.UserType;
 
 import lombok.Data;
 
@@ -19,6 +20,13 @@ public class MessagePush extends AbstractMessagePush implements Cloneable{
 
     @Protobuf
     private long proxyCid;//代理会话id
+    
+    @Protobuf
+    private UserType fromType;//发生方类型
+    
+    @Protobuf
+    private UserType toType;//接受方类型
+    
 	
 	@Override
 	public MessagePush clone(){
