@@ -58,14 +58,7 @@ public interface IMessageService {
 	 */
 	public void pushMsg(MessagePush messagePush,String pushId,SendMsgDto sendMsgDto);
 	
-	/**
-	 * 推送未同步消息
-	 * 1.保持离线
-	 * 2.推送消息
-	 * @param c2sProtocol
-	 * @param userId
-	 */
-	public void pushOfflineMsg(long tenementId,String userId,C2sProtocol  c2sProtocol);
+	
 	
 	
 

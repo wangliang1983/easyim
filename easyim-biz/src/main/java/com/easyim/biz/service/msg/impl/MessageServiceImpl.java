@@ -128,7 +128,12 @@ public class MessageServiceImpl implements IMessageService {
 		// 保存离线消息id list
 		redisTemplate.zadd(key, Double.parseDouble(String.valueOf(msgId)), JSON.toJSONString(msgId));
 
-		redisTemplate.setex(offlineMsgKey.getBytes(Constant.CHARSET), Constant.OFFLINE_TIME, msg);
+		//不存在数据才覆盖
+		byte[] datas = redisTemplate.get(offlineMsgKey.getBytes(Constant.CHARSET));
+		if(datas==null||datas.length==0) {
+			redisTemplate.setex(offlineMsgKey.getBytes(Constant.CHARSET), Constant.OFFLINE_TIME, msg);
+		}
+		
 
 		long count = redisTemplate.zcard(key);
 		if (count > MAX_OFFLINE_NUM) {// 离线消息超过最大数
@@ -177,14 +182,14 @@ public class MessageServiceImpl implements IMessageService {
 	 * @param msgId
 	 * @param isMultiDevice
 	 */
-	private C2sProtocol saveOfflineMsg(MessagePush messagePush, String toId, boolean saveOfflineMsg) {
+	private C2sProtocol saveOfflineMsg(MessagePush messagePush, String toId,int type) {
 		C2sProtocol c2sProtocol = new C2sProtocol();
 
 		c2sProtocol.setType(EasyImC2sType.messagePush.getValue());
 		c2sProtocol.setBody(JSON.toJSONString(messagePush));
 
 		// 不保存离线消息
-		if (!saveOfflineMsg || !MessageType.isSaveOffline(messagePush.getType())) {
+		if (!MessageType.isSaveOffline(type)) {
 			return c2sProtocol;
 		}
 
@@ -303,7 +308,7 @@ public class MessageServiceImpl implements IMessageService {
 		log.info("messagePush:{},{}", msgId, messageDto.getToId());
 
 		// 保存离线消息
-		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, messagePush.getToId(), messageDto.isSaveOfflineMsg());
+		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, messagePush.getToId(),messagePush.getType());
 
 		log.info("sendMsg msg:{},{} offline succ", msgId, messageDto.getToId());
 
@@ -439,7 +444,7 @@ public class MessageServiceImpl implements IMessageService {
 		log.info("pushMsg:{},{},{}",pushId,cid,JSON.toJSONString(messagePush));
 		
 		
-		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, pushId, sendMsgDto.isSaveOfflineMsg());
+		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, pushId, sendMsgDto.isSaveOfflineMsg()?messagePush.getType():MessageType.notifyOnline.getValue());
 
 		this.conversationService.addRecentlyConversation(messagePush,sendMsgDto.isSaveFromConversation(),sendMsgDto.isSaveToConversation());
 
@@ -447,22 +452,7 @@ public class MessageServiceImpl implements IMessageService {
 		this.protocolRouteService.route(tenementId,pushId,JSON.toJSONString(c2sProtocol), null);
 	}
 
-	@Override
-	public void pushOfflineMsg(long tenementId, String userId, C2sProtocol c2sProtocol) {
 
-		String key = getOfflineSetKey(tenementId, userId);
-		// 多设备离线消息
-		long msgId = this.getId();
-		try {
-			saveOfflineMsg(key, msgId, c2sProtocol);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-
-		// 路由协议
-		this.protocolRouteService.route(tenementId, userId, JSON.toJSONString(c2sProtocol), null);
-	}
 
 	@Override
 	public List<C2sProtocol> pullOfflineMsg(OfflineMsgDto offlineMsgDto) {
