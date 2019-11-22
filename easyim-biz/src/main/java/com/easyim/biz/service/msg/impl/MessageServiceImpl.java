@@ -444,7 +444,7 @@ public class MessageServiceImpl implements IMessageService {
 		log.info("pushMsg:{},{},{}",pushId,cid,JSON.toJSONString(messagePush));
 		
 		
-		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, pushId, sendMsgDto.isSaveOfflineMsg()?messagePush.getType():MessageType.notifyOnline.getValue());
+		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, pushId, sendMsgDto.isSaveOfflineMsg()?messagePush.getType():MessageType.onlyPushOnline.getValue());
 
 		this.conversationService.addRecentlyConversation(messagePush,sendMsgDto.isSaveFromConversation(),sendMsgDto.isSaveToConversation());
 
