@@ -16,13 +16,13 @@ import com.alibaba.druid.pool.DruidDataSource;
 @Configuration
 public class ImDbConfig {
 
-	@Value("${jdbc.url}")
+	@Value("${jdbc.url.im}")
 	private String url;
 	
-	@Value("${jdbc.username}")
+	@Value("${jdbc.username.im}")
 	private String username;
 	
-	@Value("${jdbc.password}")
+	@Value("${jdbc.password.im}")
 	private String password;
 	
 	public static final int INIT_SIZE =2;
