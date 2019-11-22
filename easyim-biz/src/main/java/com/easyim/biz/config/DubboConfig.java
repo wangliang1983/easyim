@@ -20,7 +20,7 @@ public class DubboConfig {
 	@Value("${dubbo.timeout}")
 	private int timeout;
 
-	@Value("${dubbo.address}")
+	@Value("${zookeeper.url}")
 	private String address;
 
 	@Value("${dubbo.port}")

@@ -16,7 +16,7 @@ public class DubboConsumerConfig {
 	@Value("${dubbo.timeout}")
 	private int timeOut;
 
-	@Value("${dubbo.address}")
+	@Value("${zookeeper.url}")
 	private String address;
 	
 	
