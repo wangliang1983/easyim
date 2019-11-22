@@ -282,8 +282,6 @@ public class MessageServiceImpl implements IMessageService {
 			cid = conversationService.getAndCreateCid(tenementId, fromId, toId, proxyCid);
 		}
 
-		log.info("sendMsg msg:{},{} cid succ", msgId, messageDto.getToId());
-
 		// build msg push
 		MessagePush messagePush = new MessagePush();
 		messagePush.setId(msgId);
@@ -305,14 +303,8 @@ public class MessageServiceImpl implements IMessageService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		messagePush.setTime(sdf.format(messageDo.getGmtCreate()));
 
-		log.info("messagePush:{},{}", msgId, messageDto.getToId());
-
 		// 保存离线消息
 		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, messagePush.getToId(),messagePush.getType());
-
-		log.info("sendMsg msg:{},{} offline succ", msgId, messageDto.getToId());
-
-		
 
 		// 增加最近聊天的会话
 		this.conversationService.addRecentlyConversation(messagePush,messageDto.isSaveFromConversation(),messageDto.isSaveToConversation());
@@ -324,7 +316,6 @@ public class MessageServiceImpl implements IMessageService {
 	public SendMsgResultDto sendMsg(SendMsgDto messageDto, String excludeSessionId) {
 		// 生产msgId
 		long msgId = getId();
-		log.info("sendMsg msg:{},{}", msgId, messageDto.getToId());
 
 		SendMsgResultDto dto = new SendMsgResultDto();
 
