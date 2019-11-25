@@ -64,6 +64,7 @@ public class SendMsgDto implements Serializable{
 		notify(3),//系统通知,不落库,只走离线消息
 		userDefined(4),//自定义
 		onlyPushOnline(5),//系统通知,不落库,不走离线消息,只推在线
+		notifyOnline(5),//系统通知,不落库,不走离线消息,只推在线
 		file(6),//文件
 		video(7),//视频
 		notifyIndb(100);//系统通知落库
