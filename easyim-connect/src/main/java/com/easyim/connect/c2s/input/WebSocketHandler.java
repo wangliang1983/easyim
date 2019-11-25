@@ -102,9 +102,10 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<Object>{
                     HttpVersion.HTTP_1_1, HttpResponseStatus.BAD_REQUEST));
             return;
         }
-        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
-                "ws://localhost:1024/ws", null, false);
+        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory("ws://localhost:1024/ws", null, false);
         handshaker = wsFactory.newHandshaker(req);
+        
+        
         if (handshaker == null) {
             WebSocketServerHandshakerFactory.sendUnsupportedWebSocketVersionResponse(ctx.channel());
         } else {
