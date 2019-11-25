@@ -2,6 +2,8 @@ package com.easyim.biz.service.msg.impl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
@@ -220,6 +224,55 @@ public class MessageServiceImpl implements IMessageService {
 	}
 
 	/**
+	  * 过滤UTF-8 4个字节
+	 * @param str
+	 * @return
+	 */
+	private static String emojiFilter(String str) {
+		String patternString = "([\\x{10000}-\\x{10ffff}\ud800-\udfff])";
+
+		Pattern pattern = Pattern.compile(patternString);
+		Matcher matcher = pattern.matcher(str);
+
+		StringBuffer sb = new StringBuffer();
+		while (matcher.find()) {
+			try {
+				matcher.appendReplacement(sb, "[[EMOJI:" + URLEncoder.encode(matcher.group(1), "UTF-8") + "]]");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		matcher.appendTail(sb);
+
+		return sb.toString();
+	}
+
+	/**
+	  * 还原UTF-8 4个字节
+	 * @param str
+	 * @return
+	 */
+	private static String emojiRecovery(String str) {
+		String patternString = "\\[\\[EMOJI:(.*?)\\]\\]";
+
+		Pattern pattern = Pattern.compile(patternString);
+		Matcher matcher = pattern.matcher(str);
+
+		StringBuffer sb = new StringBuffer();
+		while (matcher.find()) {
+			try {
+				matcher.appendReplacement(sb, URLDecoder.decode(matcher.group(1), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		matcher.appendTail(sb);
+
+		return sb.toString();
+	}
+	
+	
+	/**
 	 * 保存消息
 	 * 
 	 * @param cid
@@ -232,6 +285,9 @@ public class MessageServiceImpl implements IMessageService {
 		message.setGmtCreate(new Date());
 
 		if (MessageType.isSaveDb(messagePush.getType())) {
+			
+			message.setContent(emojiFilter(message.getContent()));
+			
 			this.messageMapper.insertMessage(message);
 		}
 
