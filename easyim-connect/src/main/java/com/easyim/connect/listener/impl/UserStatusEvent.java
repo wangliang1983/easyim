@@ -13,7 +13,7 @@ import com.easyim.connect.listener.SessionEventListener;
 @Component
 public class UserStatusEvent implements SessionEventListener{
 
-	@Reference
+	@Reference(lazy=true,check = false,retries=1)
 	private IConversationService conversationService;
 	
 	@Override
