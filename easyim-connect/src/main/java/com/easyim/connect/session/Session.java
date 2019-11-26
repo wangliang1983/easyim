@@ -2,6 +2,7 @@ package com.easyim.connect.session;
 
 import java.util.UUID;
 
+import com.easyim.biz.api.protocol.c2s.Message.UserType;
 import com.easyim.biz.api.protocol.enums.c2s.ResourceType;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -35,7 +36,8 @@ public class Session {
 	private ResourceType resource;//设备
 	
 	private int  timeOutCycle = 1;//超时圈数
-	private String userType;
+	private UserType userType;
+	private long merchantId;
 	
 	public String getSessionId(){
 		return chc.channel().id().asLongText();

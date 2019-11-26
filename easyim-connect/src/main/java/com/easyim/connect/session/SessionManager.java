@@ -149,7 +149,7 @@ public class SessionManager {
 	 * 更新会话状态为已登录
 	 * @param session
 	 */
-	public static boolean addSession(ChannelHandlerContext chc,AuthAck authAck,int timeOutCycle,String userType){
+	public static boolean addSession(ChannelHandlerContext chc,AuthAck authAck,int timeOutCycle){
 		
 		Session session = Session
 				.builder()
@@ -158,7 +158,8 @@ public class SessionManager {
 				.userId(authAck.getUserId())
 				.resource(authAck.getResource())
 				.timeOutCycle(timeOutCycle)
-				.userType(userType)
+				.userType(authAck.getUserType())
+				.merchantId(authAck.getMerchantId())
 				.build();
 				
 		
@@ -207,6 +208,7 @@ public class SessionManager {
 			userSessionDto.setUserId(session.getUserId());
 			userSessionDto.setResourceType(session.getResource());
 			userSessionDto.setSessionTimeOut(session.getTimeOutCycle()*60);
+			userSessionDto.setMerchantId(session.getMerchantId());
 		}else{
 			userSessionDto.setSessionTimeOut(60);
 		}

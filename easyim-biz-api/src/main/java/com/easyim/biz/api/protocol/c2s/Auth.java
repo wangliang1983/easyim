@@ -17,9 +17,7 @@ public class Auth extends AbstractProtocol{
 	
 	private AuthType authType = AuthType.jwt;
 	private String token;//用户登录token
-	private long tenementId;//由客户端决定tenmentId
 	private int timeoutCycle = 1;//默认60秒超时
-	private String userType;//业务扩展
 	
 	public static final int MAX_CYCLE = 15;
 	

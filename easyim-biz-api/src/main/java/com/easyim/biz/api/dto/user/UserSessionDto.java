@@ -18,6 +18,7 @@ public class UserSessionDto implements Serializable {
 	private static final long serialVersionUID = 641955703820226722L;
 
 	private long tenementId;
+	private long merchantId;
 	private String userId;
 	private ResourceType resourceType;
 	

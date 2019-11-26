@@ -80,6 +80,8 @@ public class AuthPServiceImpl implements IC2SProtocolService<Auth,AuthAck>{
 		authAck.setTenementId(user.getTenementId());
 		authAck.setUserId(user.getUserId());
 		authAck.setResource(user.getResourceType());
+		authAck.setMerchantId(user.getMerchantId());
+		
 		return authAck;
 	}
 

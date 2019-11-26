@@ -68,7 +68,8 @@ public class UserAuthServiceImpl implements IUserAuthService{
 		
 		long tenementId =userAuthDto.getTenementId();
 		ResourceType  resourceType =userAuthDto.getResourceType();
-		String userId =userAuthDto.getUserId();
+		String userId   =userAuthDto.getUserId();
+		long merchantId =userAuthDto.getMerchantId();
 		
 		//指定签名的时候使用的签名算法，也就是header那部分，jjwt已经将这部分内容封装好了。
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -80,7 +81,9 @@ public class UserAuthServiceImpl implements IUserAuthService{
         Map<String, Object> claims = new HashMap<String, Object>();
         claims.put("tenementId",tenementId);
         claims.put("resourceType",resourceType);
-
+        claims.put("merchantId",merchantId);
+        
+        
 
         //这里其实就是new一个JwtBuilder，设置jwt的body
         JwtBuilder builder = Jwts.builder()
@@ -113,12 +116,14 @@ public class UserAuthServiceImpl implements IUserAuthService{
         
         String userId      = claims.getSubject();
         long   tenementId  = claims.get("tenementId",Long.class);
+        long   merchantId  = claims.get("merchantId",Long.class);
         ResourceType resourceType = ResourceType.valueOf(claims.get("resourceType",String.class));
         
         UserAuthDto userBo = new UserAuthDto();
         userBo.setUserId(userId);
         userBo.setTenementId(tenementId);
         userBo.setResourceType(resourceType);
+        userBo.setMerchantId(merchantId);
         return userBo;
 	}
 

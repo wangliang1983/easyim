@@ -1,5 +1,6 @@
 package com.easyim.biz.api.protocol.c2s;
 
+import com.easyim.biz.api.protocol.c2s.Message.UserType;
 import com.easyim.biz.api.protocol.enums.c2s.ResourceType;
 import com.easyim.biz.api.protocol.enums.c2s.Result;
 
@@ -17,7 +18,9 @@ public class AuthAck extends AbstractResultProtocol{
 	private ResourceType resource;//多设备登录相关
 	private String userId;//用户id
 	private long tenementId;//用户租户
-
+	private long merchantId;
+	private UserType userType;
+	
 	public AuthAck() {
 	}
 	
