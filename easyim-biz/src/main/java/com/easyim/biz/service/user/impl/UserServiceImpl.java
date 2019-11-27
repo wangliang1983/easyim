@@ -61,7 +61,6 @@ public class UserServiceImpl implements IUserService {
 			UserStatusPush userStatusPush = new UserStatusPush();
 			
 			userStatusPush.setUserStatus(status);
-			userStatusPush.setFromId(online);
 			userStatusPush.setToId(userId);
 			userStatusPush.setCid(map.get(userId));
 			

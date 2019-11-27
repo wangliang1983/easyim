@@ -14,8 +14,6 @@ public class UserStatusPush extends AbstractProtocol{
 	
 	private long cid;
 	
-	private String fromId;
-	
 	private String toId;
 	
 	private UserStatus userStatus;
