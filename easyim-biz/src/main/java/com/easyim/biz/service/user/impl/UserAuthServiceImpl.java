@@ -64,7 +64,6 @@ public class UserAuthServiceImpl implements IUserAuthService{
 	
 	@Override
 	public String authEncode(UserAuthDto userAuthDto) {
-		Launch.doValidatorDoError(userAuthDto);
 		
 		long tenementId =userAuthDto.getTenementId();
 		ResourceType  resourceType =userAuthDto.getResourceType();

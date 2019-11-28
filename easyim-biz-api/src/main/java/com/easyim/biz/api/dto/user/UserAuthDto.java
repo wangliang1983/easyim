@@ -18,7 +18,7 @@ public class UserAuthDto implements Serializable {
 	@Min(value = 1)
 	private long tenementId;//租户id
 	
-	@Min(value = 1)
+	@Min(value = 0)
 	private long merchantId;//商户id
 	
 	@NotNull
