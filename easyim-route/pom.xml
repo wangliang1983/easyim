@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -33,8 +34,8 @@
 			<artifactId>fastjson</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.easy-springboot</groupId>
-			<artifactId>c2s</artifactId>
+			<groupId>cn.linkedcare.springboot</groupId>
+			<artifactId>spring-boot-c2s</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.easyim</groupId>
@@ -42,12 +43,12 @@
 			<version>0.2.34</version>
 		</dependency>
 		<dependency>
-				<groupId>io.reactivex.rxjava2</groupId>
-				<artifactId>rxjava</artifactId>
+			<groupId>io.reactivex.rxjava2</groupId>
+			<artifactId>rxjava</artifactId>
 		</dependency>
 		<dependency>
-				<groupId>cn.linkedcare.springboot</groupId>
-    			<artifactId>spring-boot-redis</artifactId>
+			<groupId>cn.linkedcare.springboot</groupId>
+			<artifactId>spring-boot-redis</artifactId>
 		</dependency>
 	</dependencies>
 </project>
