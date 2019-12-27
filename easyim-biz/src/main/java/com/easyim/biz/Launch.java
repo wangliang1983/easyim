@@ -12,6 +12,7 @@ import javax.validation.Validator;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -52,6 +53,7 @@ public class Launch {
 		}
 	}
 
+	MybatisAutoConfiguration  m;
 	
 	@Bean
 	public Mapper getMapper(){

@@ -31,8 +31,6 @@ import javax.annotation.PreDestroy;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
-import com.easy.springboot.c2s.client.IC2sClient;
-import com.easy.springboot.c2s.dto.ServerDto;
 import com.easyim.biz.api.dto.protocol.C2sProtocol;
 import com.easyim.biz.api.dto.protocol.S2sProtocol;
 import com.easyim.route.dto.FixedChannelPoolDto;
@@ -40,6 +38,8 @@ import com.easyim.route.inputHandler.S2sClientInputHandler;
 import com.easyim.route.inputHandler.pool.RouteChannelPoolHandler;
 import com.easyim.route.inputHandler.pool.RouteFixedChannelPool;
 
+import cn.linkedcare.springboot.c2s.client.IC2sClient;
+import cn.linkedcare.springboot.c2s.dto.ServerDto;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;

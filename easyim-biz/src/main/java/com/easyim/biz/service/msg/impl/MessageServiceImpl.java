@@ -24,8 +24,6 @@ import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -68,12 +66,7 @@ import com.easyim.biz.task.SynMessageTask.SynMessageTaskDto;
 import com.easyim.route.service.IProtocolRouteService;
 
 import cn.linkedcare.springboot.redis.template.RedisTemplate;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Tuple;
 import redis.clients.util.SafeEncoder;

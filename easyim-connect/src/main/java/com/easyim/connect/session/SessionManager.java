@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
-import com.easy.springboot.c2s.server.AbstractServerRegister;
 import com.easyim.biz.api.dto.protocol.C2sProtocol;
 import com.easyim.biz.api.dto.user.UserSessionDto;
 import com.easyim.biz.api.protocol.c2s.AuthAck;
@@ -21,6 +20,7 @@ import com.easyim.connect.listener.SessionEventDto;
 import com.easyim.connect.listener.SessionEventListenerManager;
 import com.easyim.connect.session.Session.SessionStatus;
 
+import cn.linkedcare.springboot.c2s.server.AbstractServerRegister;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
