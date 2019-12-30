@@ -20,6 +20,7 @@ import com.easyim.biz.api.protocol.c2s.Auth.AuthType;
 import com.easyim.biz.api.protocol.enums.c2s.EasyImC2sType;
 import com.easyim.biz.api.protocol.enums.c2s.Result;
 import com.easyim.biz.api.service.user.IUserAuthService;
+import com.easyim.biz.api.utils.MD5Util;
 import com.easyim.biz.service.c2s.protocol.IC2SProtocolService;
 import com.easyim.route.service.IUserRouteService;
 
@@ -79,6 +80,7 @@ public class AuthPServiceImpl implements IC2SProtocolService<Auth,AuthAck>{
 		
 		authAck.setTenementId(user.getTenementId());
 		authAck.setUserId(user.getUserId());
+		authAck.setUserDeviceId(MD5Util.md5(user.getUserId()));
 		authAck.setResource(user.getResourceType());
 		authAck.setMerchantId(user.getMerchantId());
 		

@@ -31,11 +31,7 @@ public class AuthAck extends AbstractResultProtocol{
 	}
 
 	
-	public void setUserId(String userId) {
-		this.userId = userId;
-		this.setUserDeviceId(MD5Util.md5(userId));
-	}
-	
+
 	
 	
 }
