@@ -29,7 +29,7 @@ public class Message extends AbstractProtocol{
 	private UserType toType;
 	private String toProxyId;
 	
-	private MessageType type;
+	private int type;
 	private int subType;
 	private String content;
 	
