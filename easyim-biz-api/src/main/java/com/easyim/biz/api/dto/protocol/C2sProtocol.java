@@ -4,11 +4,8 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
-import com.easyim.biz.api.protocol.c2s.AbstractProtocol;
-import com.easyim.biz.api.protocol.enums.c2s.EasyImC2sType;
 import com.easyim.biz.api.protocol.enums.c2s.C2sType;
 
-import lombok.Builder;
 import lombok.Data;
 
 
@@ -19,6 +16,7 @@ public class C2sProtocol implements Serializable{
 	
 	private  String uuid = UUID.randomUUID().toString();
 	private  String version = "1.0";
+	private  String product;//产品
 	@Protobuf
 	private  String type;
 	@Protobuf

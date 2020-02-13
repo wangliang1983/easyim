@@ -271,12 +271,14 @@ public class MessageServiceImpl implements IMessageService {
 	 * @param cid
 	 * @param toId
 	 */
-	private MessageDo saveMsg(MessagePush messagePush, String proxyFromId, String proxyToId) {
+	private MessageDo saveMsg(MessagePush messagePush, String proxyFromId, String proxyToId,String product) {
 		MessageDo message = mapper.map(messagePush, MessageDo.class);
 		message.setProxyFromId(proxyFromId);
 		message.setProxyToId(proxyToId);
 		message.setGmtCreate(new Date());
-
+		message.setProduct(product);
+		
+		
 		if (MessageType.isSaveDb(messagePush.getType())) {
 			
 			message.setContent(emojiFilter(message.getContent()));
@@ -307,7 +309,7 @@ public class MessageServiceImpl implements IMessageService {
 	 * @param messageDto
 	 */
 	@Override
-	public C2sProtocol saveMsg(long msgId, SendMsgDto messageDto) {
+	public C2sProtocol saveMsg(long msgId,SendMsgDto messageDto) {
 		// 得到代理会话
 		long tenementId = messageDto.getTenementId();
 		long proxyCid = messageDto.getProxyCid();
@@ -348,7 +350,8 @@ public class MessageServiceImpl implements IMessageService {
 		messagePush.setToType(messageDto.getToType());
 		
 		// 保存db消息
-		MessageDo messageDo = saveMsg(messagePush, proxyFromId, proxyToId);
+		MessageDo messageDo = saveMsg(messagePush, proxyFromId, proxyToId,messageDto.getProduct());
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		messagePush.setTime(sdf.format(messageDo.getGmtCreate()));
 

@@ -32,12 +32,14 @@ public class MessagePServiceImpl implements IC2SProtocolService<Message,MessageA
 	}
 
 	@Override
-	public MessageAck handleProtocolBody(UserSessionDto userSessionDto,Message message,
+	public MessageAck handleProtocolBody(String product,UserSessionDto userSessionDto,Message message,
 			Map<String, String> extendsMap) {
 		
 		String sessionId = userSessionDto.getSessionId();
 		
 		SendMsgDto sendMsgDto = mapper.map(message, SendMsgDto.class);
+		sendMsgDto.setProduct(product);
+		
 		
 		SendMsgResultDto  result = messageService.sendMsg(sendMsgDto,sessionId);
 		

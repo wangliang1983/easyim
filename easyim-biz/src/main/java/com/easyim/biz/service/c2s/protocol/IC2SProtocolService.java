@@ -67,7 +67,7 @@ public interface IC2SProtocolService<I extends AbstractProtocol,O extends Abstra
 		I input =JSON.parseObject(c2sProtocol.getBody(),classInput);
 		
 		//业务处理，协议输出
-		O outputBody = handleProtocolBody(userSessionDto,
+		O outputBody = handleProtocolBody(c2sProtocol.getProduct(),userSessionDto,
 				input,extendsMap);
 		
 		C2sProtocol c2sProtocolAck = new C2sProtocol(this.getType().getAck(),
@@ -84,5 +84,5 @@ public interface IC2SProtocolService<I extends AbstractProtocol,O extends Abstra
 	 * @param version
 	 * @return
 	 */
-	public O handleProtocolBody(UserSessionDto userSessionDto,I body,Map<String,String> extendsMap);
+	public O handleProtocolBody(String product,UserSessionDto userSessionDto,I body,Map<String,String> extendsMap);
 }

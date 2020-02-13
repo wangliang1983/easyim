@@ -45,7 +45,9 @@ public class C2sHandleServiceImpl implements IC2sHandleService,BeanPostProcessor
 		
 		
 		C2sProtocol c2sProtocolAck = service.handleProtocol(userSessionDto,c2sProtocol,extendsMap);
-	
+		c2sProtocolAck.setProduct(c2sProtocol.getProduct());
+		
+		
 		ProtocolListenerDto dto = ProtocolListenerDto.builder()
 		.c2sType(c2sCommandType).userSessionDto(userSessionDto).input(c2sProtocol).output(c2sProtocolAck).build();
 		

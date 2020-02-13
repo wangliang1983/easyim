@@ -1,0 +1,10 @@
+ALTER TABLE `t_message_00`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_01`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_02`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_03`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_04`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_05`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_06`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_07`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_08`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;
+ALTER TABLE `t_message_09`	ADD COLUMN `product` VARCHAR(50) NULL DEFAULT NULL AFTER `tenement_id`;

@@ -19,6 +19,9 @@ public class SendMsgDto implements Serializable{
 	private static final long serialVersionUID = 5892262306396991909L;
 	@Min(value = 0)
 	private long tenementId;
+	
+	private String product;//产品名
+	
 	@NotNull
 	private String fromId;
 	

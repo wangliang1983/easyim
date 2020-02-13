@@ -8,6 +8,7 @@ import lombok.Data;
 public class MessageDo {
 	private long id;
 	private long tenementId;//租户id
+	private String product;
 	private String fromId;//消息from
 	private String toId;//消息接收方
 	private String proxyFromId;//发送方路由的代理

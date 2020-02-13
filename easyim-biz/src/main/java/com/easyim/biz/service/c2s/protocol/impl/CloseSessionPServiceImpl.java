@@ -27,7 +27,7 @@ public class CloseSessionPServiceImpl implements IC2SProtocolService<CloseSessio
 	}
 
 	@Override
-	public CloseSessionAck handleProtocolBody(UserSessionDto userSessionDto, CloseSession body, Map<String, String> extendsMap) {
+	public CloseSessionAck handleProtocolBody(String product,UserSessionDto userSessionDto, CloseSession body, Map<String, String> extendsMap) {
 		boolean result = userRouteService.removeUserRoute(userSessionDto);
 		
 		CloseSessionAck closeSessionAck = new CloseSessionAck();

@@ -27,7 +27,7 @@ public class PingPServiceImpl implements IC2SProtocolService<Ping, PingAck> {
 	}
 
 	@Override
-	public PingAck handleProtocolBody(UserSessionDto userSessionDto, Ping body, Map<String, String> extendsMap) {
+	public PingAck handleProtocolBody(String product,UserSessionDto userSessionDto, Ping body, Map<String, String> extendsMap) {
 		PingAck pingAck = new PingAck();
 
 		boolean result = userRouteService.pingUserRoute(userSessionDto);

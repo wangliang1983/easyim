@@ -46,7 +46,7 @@ public class AuthPServiceImpl implements IC2SProtocolService<Auth,AuthAck>{
 	
 	
 	@Override
-	public AuthAck handleProtocolBody(UserSessionDto userSessionDto, Auth auth, Map<String, String> extendsMap) {
+	public AuthAck handleProtocolBody(String product,UserSessionDto userSessionDto, Auth auth, Map<String, String> extendsMap) {
 		String authToken = auth.getToken();
 		AuthAck authAck = new AuthAck();
 		

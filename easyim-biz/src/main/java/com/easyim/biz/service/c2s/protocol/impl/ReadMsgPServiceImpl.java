@@ -36,7 +36,7 @@ public class ReadMsgPServiceImpl implements IC2SProtocolService<ReadMessage,Read
 	}
 
 	@Override
-	public ReadMessageAck handleProtocolBody(UserSessionDto userSessionDto,ReadMessage body,
+	public ReadMessageAck handleProtocolBody(String product,UserSessionDto userSessionDto,ReadMessage body,
 			Map<String, String> extendsMap) {
 		long cid = body.getCid();
 		long msgId = body.getMsgId();

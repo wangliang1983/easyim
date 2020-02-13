@@ -23,7 +23,8 @@ public interface IMessageService {
 	 * @param messageDto
 	 * @return
 	 */
-	public  C2sProtocol saveMsg(long msgId,SendMsgDto messageDto);
+	public C2sProtocol saveMsg(long msgId,SendMsgDto messageDto);
+	
 	
 	/**
 	 * 保存消息
@@ -58,10 +59,6 @@ public interface IMessageService {
 	 */
 	public void pushMsg(MessagePush messagePush,String pushId,SendMsgDto sendMsgDto);
 	
-	
-	
-	
-
 	
 	
 	/**
