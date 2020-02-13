@@ -491,6 +491,7 @@ public class MessageServiceImpl implements IMessageService {
 
 		this.conversationService.addRecentlyConversation(messagePush,sendMsgDto.isSaveFromConversation(),sendMsgDto.isSaveToConversation());
 
+		c2sProtocol.setProduct(sendMsgDto.getProduct());
 		// 路由协议
 		this.protocolRouteService.route(tenementId,pushId,JSON.toJSONString(c2sProtocol), null);
 	}
