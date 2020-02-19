@@ -445,6 +445,9 @@ public class MessageServiceImpl implements IMessageService {
 		List<C2sProtocol> list = new ArrayList<C2sProtocol>();
 
 		for (byte[] b : c2sBytes) {
+			if(b==null||b.length<=0) {
+				continue;
+			}
 			C2sProtocol newStt = null;
 			try {
 				newStt = simpleTypeCodec.decode(b);
