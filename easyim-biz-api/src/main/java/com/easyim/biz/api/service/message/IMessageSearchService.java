@@ -21,6 +21,14 @@ public interface IMessageSearchService {
 	public List<MessagePush> selectMsgHistory(long tenementId,long proxyCid,long minMsgId);
 	
 	/**
+	 * 查询消息历史
+	 * @param cid
+	 * @param minMsgId
+	 * @return
+	 */
+	public List<MessagePush> selectMsgHistoryByBizcode(long tenementId,String tenantId,String bizCode,long minMsgId);
+	
+	/**
 	 * 查询消息历史,只显示自己的对话
 	 * @param cid
 	 * @param minMsgId

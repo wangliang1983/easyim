@@ -71,6 +71,26 @@ public class MessageSearchServiceImpl implements IMessageSearchService{
 		return selectMsgHistory(tenementId,proxyCid,cid,minMsgId);
 	}
 
+	@Override
+	public List<MessagePush> selectMsgHistoryByBizcode(long tenementId, String tenantId, String bizCode,
+			long minMsgId) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		List<MessagePush> messages = new ArrayList<MessagePush>();
+		
+		List<MessageDo> list =  this.messageMapper.selectMsgHistoryByBizcode(tenementId, tenantId, bizCode, minMsgId);
+		for(MessageDo l:list){
+			MessagePush messagePush = mapper.map(l,MessagePush.class);
+			messagePush.setTime(sdf.format(l.getGmtCreate()));
+			
+			messages.add(messagePush);
+		}
+		
+		return messages;
+	
+	}
+
 	
 
 }

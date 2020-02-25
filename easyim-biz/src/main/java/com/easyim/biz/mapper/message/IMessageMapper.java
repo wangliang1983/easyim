@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,6 +23,21 @@ public interface IMessageMapper {
 	@Options(useGeneratedKeys = true,keyProperty="id",keyColumn="id")  
 	public long insertMessage(@Param("m")MessageDo mDo);
 	
+	@Select(
+			"<script>" +
+			"select * from t_message where tenement_id=#{tenementId} "
+    		+ "<if test=\"minMsgId > 0 \">"
+			+ " <![CDATA[ and id < #{minMsgId} ]]> "
+			+ "</if>"
+			+ " and biz_uid=#{bizCode} "
+			+ " and tenant_id=#{tenantId} "
+			+ "order by id desc limit 10"
+			+"</script>"
+			)
+    @ResultMap("msg")
+	public List<MessageDo> selectMsgHistoryByBizcode(@Param("tenementId")long tenementId, 
+			@Param("tenantId")String tenantId,@Param("bizCode") String bizCode,
+			@Param("minMsgId")long minMsgId);
 
 
 	@Select(

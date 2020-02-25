@@ -525,6 +525,8 @@ public class MessageServiceImpl implements IMessageService {
 		}
 
 		String key = getOfflineSetKey(tenementId, userId);
+		log.info("pullOfflineMsgByOvertime key:{}",key);
+		
 		long lastMsgId = offlineMsgDto.getLastMsgId();
 
 		return pullOfflineMsg(key, lastMsgId);
