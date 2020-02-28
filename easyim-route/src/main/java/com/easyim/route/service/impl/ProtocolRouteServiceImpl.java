@@ -94,6 +94,8 @@ public class ProtocolRouteServiceImpl implements IProtocolRouteService{
 			return false;
 		}
 		
+		body.setProduct(product);
+		
 		S2sMessagePush s = new S2sMessagePush();
 		s.setTenementId(tenementId);
 		s.setToId(userId);
