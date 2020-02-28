@@ -67,7 +67,7 @@ public class UserServiceImpl implements IUserService {
 			c2sProtocol.setType(EasyImC2sType.userStatusPush.name());
 			c2sProtocol.setBody(JSON.toJSONString(userStatusPush));
 			
-			protocolRouteService.route(tenementId, online,JSON.toJSONString(c2sProtocol),null);
+			protocolRouteService.route(tenementId, online,null,c2sProtocol,null);
 		}
 		
 	}

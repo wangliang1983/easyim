@@ -189,7 +189,8 @@ public class MessageServiceImpl implements IMessageService {
 
 		c2sProtocol.setType(EasyImC2sType.messagePush.getValue());
 		c2sProtocol.setBody(JSON.toJSONString(messagePush));
-
+		
+		
 		// 不保存离线消息
 		if (!MessageType.isSaveOffline(type)) {
 			return c2sProtocol;
@@ -387,10 +388,9 @@ public class MessageServiceImpl implements IMessageService {
 		}
 
 		C2sProtocol c2sProtocol = saveMsg(msgId, messageDto);
-
 		// 路由协议
-		this.protocolRouteService.route(messageDto.getTenementId(), messageDto.getToId(),
-				JSON.toJSONString(c2sProtocol), excludeSessionId);
+		this.protocolRouteService.route(messageDto.getTenementId(), messageDto.getToId(),messageDto.getProduct(),
+				c2sProtocol, excludeSessionId);
 
 		log.info("sendMsg msg:{},{} route succ", msgId, messageDto.getToId());
 		dto.setMessagePush(JSON.parseObject(c2sProtocol.getBody(), MessagePush.class));
@@ -502,7 +502,7 @@ public class MessageServiceImpl implements IMessageService {
 
 		c2sProtocol.setProduct(sendMsgDto.getProduct());
 		// 路由协议
-		this.protocolRouteService.route(tenementId,pushId,JSON.toJSONString(c2sProtocol), null);
+		this.protocolRouteService.route(tenementId,pushId,sendMsgDto.getProduct(),c2sProtocol,null);
 	}
 
 

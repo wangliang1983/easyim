@@ -88,7 +88,7 @@ public class ProtocolRouteServiceImpl implements IProtocolRouteService{
 	}
 	
 	@Override
-	public boolean route(long tenementId, String userId, String body,String excludeSessionId) {
+	public boolean route(long tenementId, String userId,String product,C2sProtocol body,String excludeSessionId) {
 		String routeInfo = getRouteServer(tenementId,userId);
 		if(StringUtils.isEmpty(routeInfo)){
 			return false;
@@ -97,7 +97,7 @@ public class ProtocolRouteServiceImpl implements IProtocolRouteService{
 		S2sMessagePush s = new S2sMessagePush();
 		s.setTenementId(tenementId);
 		s.setToId(userId);
-		s.setBody(body);
+		s.setBody(JSON.toJSONString(body));
 		s.setExcludeSessionId(excludeSessionId);
 		
 		route(routeInfo,JSON.toJSONString(s));
@@ -106,9 +106,9 @@ public class ProtocolRouteServiceImpl implements IProtocolRouteService{
 
 	
 	@Override
-	public boolean routeAsyn(long tenementId, String userId, String body,String excludeSessionId) {
+	public boolean routeAsyn(long tenementId, String userId,String product, C2sProtocol body,String excludeSessionId) {
 		eService.execute(()->{
-        	route(tenementId,userId,body,excludeSessionId);
+        	route(tenementId,userId,product,body,excludeSessionId);
 		});
 		return true;
 	}
