@@ -61,6 +61,7 @@ import com.easyim.biz.mapper.conversation.IConversationMapper;
 import com.easyim.biz.mapper.conversation.IProxyConversationMapper;
 import com.easyim.biz.mapper.message.IMessageMapper;
 import com.easyim.biz.mapper.tenement.ITenementMapper;
+import com.easyim.biz.task.OfflineMaxIdTask;
 import com.easyim.biz.task.SynMessageTask;
 import com.easyim.biz.task.SynMessageTask.SynMessageTaskDto;
 import com.easyim.route.service.IProtocolRouteService;
@@ -510,9 +511,8 @@ public class MessageServiceImpl implements IMessageService {
 	public List<C2sProtocol> pullOfflineMsg(OfflineMsgDto offlineMsgDto) {
 		
 		List<C2sProtocol> list =  pullOfflineMsgByOvertime(offlineMsgDto).getList();
-		if(list.size()>0) {
-		//	offlineMsgDto.setLastMsgId(list.get(list.size()-1).ge);
-		}
+		//更新用户已同步的最后一条消息id
+		OfflineMaxIdTask.addTask(offlineMsgDto);
 		return list;
 	}
 
