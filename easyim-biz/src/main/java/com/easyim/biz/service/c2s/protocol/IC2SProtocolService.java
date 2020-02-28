@@ -73,7 +73,7 @@ public interface IC2SProtocolService<I extends AbstractProtocol,O extends Abstra
 		C2sProtocol c2sProtocolAck = new C2sProtocol(this.getType().getAck(),
 				JSON.toJSONString(outputBody));
 		c2sProtocolAck.setUuid(c2sProtocol.getUuid());
-		
+		c2sProtocolAck.setProduct(c2sProtocol.getProduct());
 		return c2sProtocolAck;
 	}
 	
