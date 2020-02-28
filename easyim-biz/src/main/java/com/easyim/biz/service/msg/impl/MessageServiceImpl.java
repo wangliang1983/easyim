@@ -511,7 +511,7 @@ public class MessageServiceImpl implements IMessageService {
 		
 		List<C2sProtocol> list =  pullOfflineMsgByOvertime(offlineMsgDto).getList();
 		if(list.size()>0) {
-			
+		//	offlineMsgDto.setLastMsgId(list.get(list.size()-1).ge);
 		}
 		return list;
 	}
