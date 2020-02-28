@@ -74,4 +74,17 @@ public interface IMessageService {
 	 */
 	public PullOfflineMsgResultDto pullOfflineMsgByOvertime(OfflineMsgDto offlineMsgDto);
 
+	/**
+	 * 更新最后一条离线消息
+	 * @param offlineMsgDto
+	 */
+	public void updateLastOfflineMsgId(OfflineMsgDto offlineMsgDto,long lastMsgId);
+	
+	/**
+	 * 得到最大的离线消息
+	 * @param tenementId
+	 * @param userId
+	 * @return
+	 */
+	public long getLastOfflineMsgId(long tenementId, String userId);
 }

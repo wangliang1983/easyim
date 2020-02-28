@@ -116,34 +116,38 @@ public class MessageServiceImpl implements IMessageService {
 	 * @param msgId
 	 * @throws IOException
 	 */
-	private void saveOfflineMsg(String key, long msgId, C2sProtocol c2sProtocol) throws IOException {
+	private void saveOfflineMsg(String key, long msgId, C2sProtocol c2sProtocol){
+		try {
+			// 序列化
+			byte[] msg = simpleTypeCodec.encode(c2sProtocol);
 
-		// 序列化
-		byte[] msg = simpleTypeCodec.encode(c2sProtocol);
+			String offlineMsgKey = getOfflineMsgKey(msgId);
+			// 保存离线消息id list
+			redisTemplate.zadd(key, Double.parseDouble(String.valueOf(msgId)), JSON.toJSONString(msgId));
 
-		String offlineMsgKey = getOfflineMsgKey(msgId);
-		// 保存离线消息id list
-		redisTemplate.zadd(key, Double.parseDouble(String.valueOf(msgId)), JSON.toJSONString(msgId));
+			//不存在数据才覆盖
+			byte[] datas = redisTemplate.get(offlineMsgKey.getBytes(Constant.CHARSET));
+			if(datas==null||datas.length==0) {
+				redisTemplate.setex(offlineMsgKey.getBytes(Constant.CHARSET), Constant.OFFLINE_TIME, msg);
+			}
+			
 
-		//不存在数据才覆盖
-		byte[] datas = redisTemplate.get(offlineMsgKey.getBytes(Constant.CHARSET));
-		if(datas==null||datas.length==0) {
-			redisTemplate.setex(offlineMsgKey.getBytes(Constant.CHARSET), Constant.OFFLINE_TIME, msg);
+			long count = redisTemplate.zcard(key);
+			if (count > MAX_OFFLINE_NUM) {// 离线消息超过最大数
+				int end = Integer.parseInt((count - MAX_OFFLINE_NUM) + "");
+
+				Set<String> ids = redisTemplate.zrange(key, 0, end);
+				for (String id : ids) {
+					String outSizeMsgKey = getOfflineMsgKey(Long.parseLong(id));
+					redisTemplate.del(outSizeMsgKey.getBytes(Constant.CHARSET));
+				}
+
+				redisTemplate.zremrangeByRank(key, 0, Integer.parseInt((count - MAX_OFFLINE_NUM) + ""));
+			}
+		}catch(IOException exception) {
+			throw new RuntimeException(exception);
 		}
 		
-
-		long count = redisTemplate.zcard(key);
-		if (count > MAX_OFFLINE_NUM) {// 离线消息超过最大数
-			int end = Integer.parseInt((count - MAX_OFFLINE_NUM) + "");
-
-			Set<String> ids = redisTemplate.zrange(key, 0, end);
-			for (String id : ids) {
-				String outSizeMsgKey = getOfflineMsgKey(Long.parseLong(id));
-				redisTemplate.del(outSizeMsgKey.getBytes(Constant.CHARSET));
-			}
-
-			redisTemplate.zremrangeByRank(key, 0, Integer.parseInt((count - MAX_OFFLINE_NUM) + ""));
-		}
 
 	}
 
@@ -179,7 +183,7 @@ public class MessageServiceImpl implements IMessageService {
 	 * @param msgId
 	 * @param isMultiDevice
 	 */
-	private C2sProtocol saveOfflineMsg(MessagePush messagePush, String toId,int type) {
+	private C2sProtocol saveOfflineMsg(MessagePush messagePush,String toId,int type) {
 		C2sProtocol c2sProtocol = new C2sProtocol();
 
 		c2sProtocol.setType(EasyImC2sType.messagePush.getValue());
@@ -190,16 +194,17 @@ public class MessageServiceImpl implements IMessageService {
 			return c2sProtocol;
 		}
 
-		String key = getOfflineSetKey(messagePush.getTenementId(), toId);
-		// 多设备离线消息
-		try {
-			this.conversationService.increaseUnread(messagePush.getType(), messagePush.getFromId(), messagePush.getCid());
+		//离线和未读消息数 to方
+		this.conversationService.increaseUnread(messagePush.getType(), messagePush.getToId(), messagePush.getCid());
 
-			saveOfflineMsg(key, messagePush.getId(), c2sProtocol);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		String toKey = getOfflineSetKey(messagePush.getTenementId(), toId);
+		saveOfflineMsg(toKey, messagePush.getId(), c2sProtocol);
+		
+		
+		//离线和未读消息数from方
+		String fromKey = getOfflineSetKey(messagePush.getTenementId(), messagePush.getFromId());
+		saveOfflineMsg(fromKey, messagePush.getId(), c2sProtocol);
+
 
 		return c2sProtocol;
 	}
@@ -503,8 +508,12 @@ public class MessageServiceImpl implements IMessageService {
 
 	@Override
 	public List<C2sProtocol> pullOfflineMsg(OfflineMsgDto offlineMsgDto) {
-
-		return pullOfflineMsgByOvertime(offlineMsgDto).getList();
+		
+		List<C2sProtocol> list =  pullOfflineMsgByOvertime(offlineMsgDto).getList();
+		if(list.size()>0) {
+			
+		}
+		return list;
 	}
 
 	@Override
@@ -530,5 +539,30 @@ public class MessageServiceImpl implements IMessageService {
 		long lastMsgId = offlineMsgDto.getLastMsgId();
 
 		return pullOfflineMsg(key, lastMsgId);
+	}
+	
+	private String getLastOfflineMsgIdKey(long tenementId, String userId) {
+		String key = Constant.OFFLINE_MSG_MAX_ID_KEY+tenementId+"_"+userId;
+		return key;
+	}
+
+	@Override
+	public void updateLastOfflineMsgId(OfflineMsgDto offlineMsgDto,long lastMsgId) {
+		String key = getLastOfflineMsgIdKey(offlineMsgDto.getTenementId(),offlineMsgDto.getUserId());
+		String value = this.redisTemplate.get(key);
+		
+		if(value==null||lastMsgId>Long.parseLong(value)) {
+			this.redisTemplate.set(key,value);
+		}
+	}
+
+	@Override
+	public long getLastOfflineMsgId(long tenementId, String userId) {
+		String key   = getLastOfflineMsgIdKey(tenementId,userId);
+		String value = this.redisTemplate.get(key);		
+		if(value==null) {
+			return 0l;
+		}
+		return Long.parseLong(value);
 	}
 }

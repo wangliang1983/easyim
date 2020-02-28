@@ -4,9 +4,9 @@ public abstract class Constant {
 	//每次查询最大未同步消息数
 	public final static int MAX_GET_OFFLINE_NUM = 50;
 	
-	public final static int MAX_RECENTLY_NUM = 100;
+	public final static int MAX_RECENTLY_NUM = 500;
 	
-	// 离线消息，最多15天
+	//离线消息，最多15天
 	public final static int OFFLINE_TIME = 15 * 24 * 60 * 60;
 	//编码格式
 	public final static String CHARSET = "UTF-8";
@@ -21,5 +21,7 @@ public abstract class Constant {
 	//离线消息
 	public static final String OFFLINE_MSG_KEY = "easyim_msg_offline_";
 
-	
+	//离线消息已拉取的最大id
+	public static final String OFFLINE_MSG_MAX_ID_KEY = "easyim_msg_offline_max_id";
+
 }
