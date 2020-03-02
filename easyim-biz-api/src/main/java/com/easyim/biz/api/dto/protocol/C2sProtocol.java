@@ -16,6 +16,7 @@ public class C2sProtocol implements Serializable{
 	
 	private  String uuid = UUID.randomUUID().toString();
 	private  String version = "1.0";
+	@Protobuf
 	private  String product;//产品
 	@Protobuf
 	private  String type;
