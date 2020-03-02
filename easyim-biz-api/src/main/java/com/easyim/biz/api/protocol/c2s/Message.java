@@ -33,4 +33,6 @@ public class Message extends AbstractProtocol{
 	private int subType;
 	private String content;
 	
+	private String bizUuid;
+	
 }

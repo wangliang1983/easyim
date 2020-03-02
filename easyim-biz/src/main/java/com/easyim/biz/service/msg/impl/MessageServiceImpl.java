@@ -343,7 +343,7 @@ public class MessageServiceImpl implements IMessageService {
 		// build msg push
 		MessagePush messagePush = new MessagePush();
 		messagePush.setId(msgId);
-		messagePush.setBizUuid(messageDto.getBizUid());
+		messagePush.setBizUuid(messageDto.getBizUuid());
 		messagePush.setCid(cid);
 		messagePush.setContent(messageDto.getContent());
 		messagePush.setFromId(fromId);

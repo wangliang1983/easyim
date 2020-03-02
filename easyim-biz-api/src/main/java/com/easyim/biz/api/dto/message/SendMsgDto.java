@@ -46,7 +46,7 @@ public class SendMsgDto implements Serializable{
 	@NotNull
 	private String content;
 
-	private String bizUid;//业务方唯一id
+	private String bizUuid;//业务方唯一id
 	
 	private boolean saveOfflineMsg = false;//是否保存离线消息
 	
