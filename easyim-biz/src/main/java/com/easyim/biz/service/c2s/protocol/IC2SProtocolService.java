@@ -13,6 +13,7 @@ import com.easyim.biz.api.dto.protocol.S2sProtocol;
 import com.easyim.biz.api.dto.user.UserSessionDto;
 import com.easyim.biz.api.protocol.c2s.AbstractProtocol;
 import com.easyim.biz.api.protocol.c2s.AbstractResultProtocol;
+import com.easyim.biz.api.protocol.c2s.Ping;
 import com.easyim.biz.api.protocol.enums.c2s.EasyImC2sType;
 import com.easyim.biz.api.protocol.enums.c2s.C2sType;
 import com.easyim.biz.listeners.ProtocolListenerFactory;
@@ -62,19 +63,40 @@ public interface IC2SProtocolService<I extends AbstractProtocol,O extends Abstra
 			throw new RuntimeException(e);
 		}
 		
-		log.info("C2sProtocol handleProtocol:{},{}",c2sProtocol.getBody(),classInput);
+		if(!c2sProtocol.getType().equals(EasyImC2sType.ping.name())) {
+			log.info("c2sProtocol handleProtocol:{},{}",c2sProtocol.getBody(),classInput);
+		}
+		
 		//得到协议输入
 		I input =JSON.parseObject(c2sProtocol.getBody(),classInput);
 		
 		//业务处理，协议输出
-		O outputBody = handleProtocolBody(c2sProtocol.getProduct(),userSessionDto,
-				input,extendsMap);
-		
-		C2sProtocol c2sProtocolAck = new C2sProtocol(this.getType().getAck(),
-				JSON.toJSONString(outputBody));
-		c2sProtocolAck.setUuid(c2sProtocol.getUuid());
-		c2sProtocolAck.setProduct(c2sProtocol.getProduct());
-		return c2sProtocolAck;
+		try {
+			O outputBody = handleProtocolBody(c2sProtocol.getProduct(),userSessionDto,
+					input,extendsMap);
+			
+			
+			C2sProtocol c2sProtocolAck = new C2sProtocol(this.getType().getAck(),
+					JSON.toJSONString(outputBody));
+			c2sProtocolAck.setUuid(c2sProtocol.getUuid());
+			c2sProtocolAck.setProduct(c2sProtocol.getProduct());
+			
+			if(!c2sProtocol.getType().equals(EasyImC2sType.ping.name())) {
+				log.info("c2sProtocol handleProtocol result:{},{}",c2sProtocol.getBody(),classInput);
+			}
+			return c2sProtocolAck;
+		}catch(Exception e) {
+			e.printStackTrace();
+			log.error("exception:{}", e);
+			
+			
+			C2sProtocol c2sProtocolAck = new C2sProtocol(EasyImC2sType.serverError,
+					e.getMessage());
+			c2sProtocolAck.setUuid(c2sProtocol.getUuid());
+			c2sProtocolAck.setProduct(c2sProtocol.getProduct());
+			
+			return c2sProtocolAck;
+		}
 	}
 	
 	/**
