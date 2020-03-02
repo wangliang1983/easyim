@@ -47,6 +47,7 @@ public class MessagePServiceImpl implements IC2SProtocolService<Message,MessageA
 		MessageAck messageAck = new MessageAck();
 		messageAck.setResult(result.getResult());
 		messageAck.setMsgId(result.getMsgId());
+		messageAck.setCid(result.getMessagePush().getCid());
 		return messageAck;
 	}
 

@@ -13,4 +13,6 @@ public class MessageAck extends AbstractResultProtocol{
 
 	private long msgId;
 	
+	private long cid;
+	
 }
