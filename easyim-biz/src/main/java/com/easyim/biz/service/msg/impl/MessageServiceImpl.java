@@ -184,12 +184,12 @@ public class MessageServiceImpl implements IMessageService {
 	 * @param msgId
 	 * @param isMultiDevice
 	 */
-	private C2sProtocol saveOfflineMsg(MessagePush messagePush,String toId,int type) {
+	private C2sProtocol saveOfflineMsg(MessagePush messagePush,String toId,int type,String product) {
 		C2sProtocol c2sProtocol = new C2sProtocol();
 
 		c2sProtocol.setType(EasyImC2sType.messagePush.getValue());
 		c2sProtocol.setBody(JSON.toJSONString(messagePush));
-		
+		c2sProtocol.setProduct(product);
 		
 		// 不保存离线消息
 		if (!MessageType.isSaveOffline(type)) {
@@ -363,7 +363,7 @@ public class MessageServiceImpl implements IMessageService {
 		messagePush.setTime(sdf.format(messageDo.getGmtCreate()));
 
 		// 保存离线消息
-		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, messagePush.getToId(),messagePush.getType());
+		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, messagePush.getToId(),messagePush.getType(),messageDto.getProduct());
 
 		// 增加最近聊天的会话
 		this.conversationService.addRecentlyConversation(messagePush,messageDto.isSaveFromConversation(),messageDto.isSaveToConversation());
@@ -496,7 +496,8 @@ public class MessageServiceImpl implements IMessageService {
 		log.info("pushMsg:{},{},{}",pushId,cid,JSON.toJSONString(messagePush));
 		
 		
-		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, pushId, sendMsgDto.isSaveOfflineMsg()?messagePush.getType():MessageType.onlyPushOnline.getValue());
+		C2sProtocol c2sProtocol = saveOfflineMsg(messagePush, pushId,
+				sendMsgDto.isSaveOfflineMsg()?messagePush.getType():MessageType.onlyPushOnline.getValue(),sendMsgDto.getProduct());
 
 		this.conversationService.addRecentlyConversation(messagePush,sendMsgDto.isSaveFromConversation(),sendMsgDto.isSaveToConversation());
 
