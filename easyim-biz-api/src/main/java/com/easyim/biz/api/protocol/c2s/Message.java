@@ -32,6 +32,7 @@ public class Message extends AbstractProtocol{
 	private int type;
 	private int subType;
 	private String content;
+	private String appPushContent;
 	
 	private String bizUuid;
 	
