@@ -10,7 +10,7 @@ import com.easyim.biz.api.protocol.enums.c2s.C2sType;
  *
  * @param <I>
  */
-public interface IProtocolListeners<AbstractProtocol,AbstractResultProtocol> {
+public interface IProtocolListeners<C2sProtocol> {
 	
 	/**
 	 * 是否同步调用
@@ -24,7 +24,7 @@ public interface IProtocolListeners<AbstractProtocol,AbstractResultProtocol> {
 	 * 事件回调
 	 * @param i
 	 */
-	public void callback(UserSessionDto userSessionDto,String c2sType,AbstractProtocol input,AbstractResultProtocol output);
+	public void callback(UserSessionDto userSessionDto,String c2sType,C2sProtocol input,C2sProtocol output);
 	
 	/**
 	 * 事件回调的消息类型
