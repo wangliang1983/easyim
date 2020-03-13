@@ -50,33 +50,35 @@ public class ProtocolListenerFactory implements BeanPostProcessor {
 
 	@PostConstruct
 	public void init() {
-		while (true) {
-			ProtocolListenerDto dto = null;
-			try {
-				dto = queue.poll(1, TimeUnit.HOURS);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			if (dto == null) {
-				continue;
-			}
-
-			List<IProtocolListeners> list = map.get(dto.getC2sType());
-			if (list == null) {
-				continue;
-			}
-
-			try {
-				for (IProtocolListeners l : list) {
-					l.callback(dto.getUserSessionDto(), dto.getC2sType(), dto.getInput(), dto.getOutput());
+		new Thread(()->{
+			while (true) {
+				ProtocolListenerDto dto = null;
+				try {
+					dto = queue.poll(1, TimeUnit.HOURS);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.error("exception:{}", e);
-			}
+				if (dto == null) {
+					continue;
+				}
 
-		}
+				List<IProtocolListeners> list = map.get(dto.getC2sType());
+				if (list == null) {
+					continue;
+				}
+
+				try {
+					for (IProtocolListeners l : list) {
+						l.callback(dto.getUserSessionDto(), dto.getC2sType(), dto.getInput(), dto.getOutput());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("exception:{}", e);
+				}
+
+			}
+		}).start();
 	}
 
 	@Override
