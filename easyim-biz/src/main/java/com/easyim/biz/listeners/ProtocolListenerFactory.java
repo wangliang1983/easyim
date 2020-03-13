@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Component;
 
 import com.easyim.biz.api.listeners.IProtocolListeners;
@@ -46,6 +48,7 @@ public class ProtocolListenerFactory implements BeanPostProcessor {
 		}
 	}
 
+	@PostConstruct
 	public void init() {
 		while (true) {
 			ProtocolListenerDto dto = null;
