@@ -49,7 +49,11 @@ public class C2sHandleServiceImpl implements IC2sHandleService,BeanPostProcessor
 		
 		
 		ProtocolListenerDto dto = ProtocolListenerDto.builder()
-		.c2sType(c2sCommandType).userSessionDto(userSessionDto).input(c2sProtocol).output(c2sProtocolAck).build();
+		.c2sType(c2sCommandType)
+		.userSessionDto(userSessionDto)
+		.input(c2sProtocol)
+		.output(c2sProtocolAck)
+		.build();
 		
 		ProtocolListenerFactory.addProtocolCallback(dto);
 		return c2sProtocolAck;

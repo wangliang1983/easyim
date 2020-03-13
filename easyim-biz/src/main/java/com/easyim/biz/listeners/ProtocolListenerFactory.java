@@ -27,8 +27,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 public class ProtocolListenerFactory implements BeanPostProcessor {
 	private static Map<C2sType, List<IProtocolListeners>> map = new ConcurrentHashMap<C2sType, List<IProtocolListeners>>();
 
-	private static Map<C2sType, List<IProtocolListeners>> synMap = new ConcurrentHashMap<C2sType, List<IProtocolListeners>>();
-
 	private static LinkedBlockingQueue<ProtocolListenerDto> queue = new LinkedBlockingQueue<ProtocolListenerDto>();
 
 	private List<IProtocolListeners> getProtocolListener(C2sType c2sCommandType) {
@@ -37,27 +35,18 @@ public class ProtocolListenerFactory implements BeanPostProcessor {
 
 	public static void addProtocolCallback(ProtocolListenerDto dto) {
 		queue.add(dto);
-
-		List<IProtocolListeners> list = synMap.get(dto.getC2sType());
-		if (list == null) {
-			return;
-		}
-
-		for (IProtocolListeners l : list) {
-			l.callback(dto.getUserSessionDto(), dto.getC2sType(), dto.getInput(), dto.getOutput());
-		}
+		log.info("addProtocolCallback:{}", dto);
 	}
 
 	@PostConstruct
 	public void init() {
-		new Thread(()->{
+		new Thread(() -> {
 			while (true) {
 				ProtocolListenerDto dto = null;
 				try {
 					dto = queue.poll(1, TimeUnit.HOURS);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e1.printStackTrace();// do noting
 				}
 				if (dto == null) {
 					continue;
@@ -90,21 +79,13 @@ public class ProtocolListenerFactory implements BeanPostProcessor {
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		if (bean instanceof IProtocolListeners) {
 			IProtocolListeners l = (IProtocolListeners) bean;
-			if (l.isSyn()) {
-				List<IProtocolListeners> list = synMap.get(l.type());
-				if (list == null) {
-					list = new ArrayList<IProtocolListeners>();
-					synMap.put(l.type(), list);
-				}
-				list.add(l);
-			} else {
-				List<IProtocolListeners> list = map.get(l.type());
-				if (list == null) {
-					list = new ArrayList<IProtocolListeners>();
-					map.put(l.type(), list);
-				}
-				list.add(l);
+
+			List<IProtocolListeners> list = map.get(l.type());
+			if (list == null) {
+				list = new ArrayList<IProtocolListeners>();
+				map.put(l.type(), list);
 			}
+			list.add(l);
 		}
 
 		return bean;
