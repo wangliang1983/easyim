@@ -25,7 +25,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 @Slf4j
 @Component
 public class ProtocolListenerFactory implements BeanPostProcessor {
-	private static Map<C2sType, List<IProtocolListeners>> map = new ConcurrentHashMap<C2sType, List<IProtocolListeners>>();
+	private static Map<String, List<IProtocolListeners>> map = new ConcurrentHashMap<String, List<IProtocolListeners>>();
 
 	private static LinkedBlockingQueue<ProtocolListenerDto> queue = new LinkedBlockingQueue<ProtocolListenerDto>();
 
@@ -34,10 +34,15 @@ public class ProtocolListenerFactory implements BeanPostProcessor {
 	}
 
 	public static void addProtocolCallback(ProtocolListenerDto dto) {
+		String type = dto.getC2sType();
+		if(map.get(type)==null||map.get(type).size()<=0) {
+			return;
+		}
 		queue.add(dto);
 		log.info("addProtocolCallback:{}", dto);
 	}
 
+	
 	@PostConstruct
 	public void init() {
 		new Thread(() -> {
@@ -83,7 +88,7 @@ public class ProtocolListenerFactory implements BeanPostProcessor {
 			List<IProtocolListeners> list = map.get(l.type());
 			if (list == null) {
 				list = new ArrayList<IProtocolListeners>();
-				map.put(l.type(), list);
+				map.put(l.type().getValue(), list);
 			}
 			list.add(l);
 		}
