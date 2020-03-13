@@ -13,6 +13,7 @@ import com.easyim.biz.api.dto.user.UserSessionDto;
 import com.easyim.biz.api.protocol.c2s.Message;
 import com.easyim.biz.api.protocol.c2s.MessageAck;
 import com.easyim.biz.api.protocol.enums.c2s.EasyImC2sType;
+import com.easyim.biz.api.protocol.enums.c2s.Result;
 import com.easyim.biz.api.service.message.IMessageService;
 import com.easyim.biz.service.c2s.protocol.IC2SProtocolService;
 
@@ -34,6 +35,8 @@ public class MessagePServiceImpl implements IC2SProtocolService<Message,MessageA
 	@Override
 	public MessageAck handleProtocolBody(String product,UserSessionDto userSessionDto,Message message,
 			Map<String, String> extendsMap) {
+		MessageAck messageAck = new MessageAck();
+
 		
 		String sessionId = userSessionDto.getSessionId();
 		
@@ -42,9 +45,11 @@ public class MessagePServiceImpl implements IC2SProtocolService<Message,MessageA
 		
 		
 		SendMsgResultDto  result = messageService.sendMsg(sendMsgDto,sessionId);
+		if(result.getResult()!=Result.success) {
+			messageAck.setResult(result.getResult());
+			return messageAck;
+		}
 		
-		
-		MessageAck messageAck = new MessageAck();
 		messageAck.setResult(result.getResult());
 		messageAck.setMsgId(result.getMsgId());
 		messageAck.setCid(result.getMessagePush().getCid());
