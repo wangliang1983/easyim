@@ -22,6 +22,7 @@ public interface ITenementMapper {
     				@Result(column="id",property="id",id=true),
     				@Result(column="name",property="name"),
     				@Result(column="is_multi_conn",property="isMultiConn"),
+    				@Result(column="biz_code",property="bizCode"),
     				@Result(column="gmt_create",property="gmtCreate"),
     		}
     		)

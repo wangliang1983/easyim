@@ -14,5 +14,6 @@ public class TenementDo {
 	private long id;
 	private String name;//描述
 	private boolean isMultiConn;//同一端是否允许多个连接
+	private String bizCode;
 	private Date gmtCreate;
 }
