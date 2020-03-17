@@ -110,6 +110,24 @@ public class MessageServiceImpl implements IMessageService {
 
 	private Codec<C2sProtocol> simpleTypeCodec = ProtobufProxy.create(C2sProtocol.class);
 
+	
+	
+	private void saveOfflineSet(String key,long msgId) throws UnsupportedEncodingException {
+		redisTemplate.zadd(key, Double.parseDouble(String.valueOf(msgId)), JSON.toJSONString(msgId));
+
+		long count = redisTemplate.zcard(key);
+		if (count > MAX_OFFLINE_NUM) {// 离线消息超过最大数
+			int end = Integer.parseInt((count - MAX_OFFLINE_NUM) + "");
+
+			Set<String> ids = redisTemplate.zrange(key, 0, end);
+			for (String id : ids) {
+				String outSizeMsgKey = getOfflineMsgKey(Long.parseLong(id));
+				redisTemplate.del(outSizeMsgKey.getBytes(Constant.CHARSET));
+			}
+
+			redisTemplate.zremrangeByRank(key, 0, Integer.parseInt((count - MAX_OFFLINE_NUM) + ""));
+		}
+	}
 	/**
 	 * 保存离线消息
 	 * 
@@ -117,34 +135,18 @@ public class MessageServiceImpl implements IMessageService {
 	 * @param msgId
 	 * @throws IOException
 	 */
-	private void saveOfflineMsg(String key, long msgId, C2sProtocol c2sProtocol){
+	private void saveOfflineMsg(String fromKey,String toKey, long msgId, C2sProtocol c2sProtocol){
 		try {
 			// 序列化
-			byte[] msg = simpleTypeCodec.encode(c2sProtocol);
-
-			String offlineMsgKey = getOfflineMsgKey(msgId);
-			// 保存离线消息id list
-			redisTemplate.zadd(key, Double.parseDouble(String.valueOf(msgId)), JSON.toJSONString(msgId));
-
-			//不存在数据才覆盖
-			byte[] datas = redisTemplate.get(offlineMsgKey.getBytes(Constant.CHARSET));
-			if(datas==null||datas.length==0) {
-				redisTemplate.setex(offlineMsgKey.getBytes(Constant.CHARSET), Constant.OFFLINE_TIME, msg);
-			}
 			
-
-			long count = redisTemplate.zcard(key);
-			if (count > MAX_OFFLINE_NUM) {// 离线消息超过最大数
-				int end = Integer.parseInt((count - MAX_OFFLINE_NUM) + "");
-
-				Set<String> ids = redisTemplate.zrange(key, 0, end);
-				for (String id : ids) {
-					String outSizeMsgKey = getOfflineMsgKey(Long.parseLong(id));
-					redisTemplate.del(outSizeMsgKey.getBytes(Constant.CHARSET));
-				}
-
-				redisTemplate.zremrangeByRank(key, 0, Integer.parseInt((count - MAX_OFFLINE_NUM) + ""));
-			}
+			String offlineMsgKey = getOfflineMsgKey(msgId);
+			byte[] msg = simpleTypeCodec.encode(c2sProtocol);
+			//不存在数据才覆盖
+			redisTemplate.setex(offlineMsgKey.getBytes(Constant.CHARSET), Constant.OFFLINE_TIME, msg);
+			
+			
+			saveOfflineSet(fromKey,msgId);
+			saveOfflineSet(toKey,msgId);
 		}catch(IOException exception) {
 			throw new RuntimeException(exception);
 		}
@@ -200,13 +202,10 @@ public class MessageServiceImpl implements IMessageService {
 		this.conversationService.increaseUnread(messagePush.getType(), messagePush.getToId(), messagePush.getCid());
 
 		String toKey = getOfflineSetKey(messagePush.getTenementId(), toId);
-		saveOfflineMsg(toKey, messagePush.getId(), c2sProtocol);
-		
-		
 		//离线和未读消息数from方
 		String fromKey = getOfflineSetKey(messagePush.getTenementId(), messagePush.getFromId());
-		saveOfflineMsg(fromKey, messagePush.getId(), c2sProtocol);
-
+		
+		saveOfflineMsg(fromKey,toKey,messagePush.getId(), c2sProtocol);
 
 		return c2sProtocol;
 	}
