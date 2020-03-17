@@ -512,7 +512,6 @@ public class MessageServiceImpl implements IMessageService {
 		
 		List<C2sProtocol> list =  pullOfflineMsgByOvertime(offlineMsgDto).getList();
 		//更新用户已同步的最后一条消息id
-		OfflineMaxIdTask.addTask(offlineMsgDto);
 		return list;
 	}
 
