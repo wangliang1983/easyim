@@ -2,9 +2,9 @@ package com.easyim.biz.constant;
 
 public abstract class Constant {
 	//每次查询最大未同步消息数
-	public final static int MAX_GET_OFFLINE_NUM = 50;
+	public final static int MAX_GET_OFFLINE_NUM = 100;
 	
-	public final static int MAX_RECENTLY_NUM = 500;
+	public final static int MAX_RECENTLY_NUM = 100;
 	
 	//离线消息，最多15天
 	public final static int OFFLINE_TIME = 15 * 24 * 60 * 60;
