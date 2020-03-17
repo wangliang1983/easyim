@@ -82,7 +82,7 @@ import redis.clients.util.SafeEncoder;
 @Service(interfaceClass = IMessageService.class)
 public class MessageServiceImpl implements IMessageService {
 	@Value("${offline.msg.nums}")
-	private long MAX_OFFLINE_NUM = 50;
+	private long MAX_OFFLINE_NUM = 100;
 
 	@Resource
 	private RedisTemplate redisTemplate;
